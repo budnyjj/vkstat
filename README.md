@@ -36,8 +36,8 @@ These scripts written in **Python 3**, and has following external dependencies:
   show **number of degrees per node**.
 
 * [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py) -- use it to plot result graph.
-  You can *explore graph in interactive mode* or *write its representation to file* 
-  (.png or .pdf are currently supported). 
+  You can explore graph in interactive mode or write its representation to file 
+  (*.png* or *.pdf* are currently supported). 
 
   For perfomance reasons, I recommend you to **plot graphs with less than 500 nodes**.
 
