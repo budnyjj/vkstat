@@ -1,5 +1,4 @@
 # vkstat
-## overview
 
 Collection of scripts for building and analyzing social graph based on vk.com API.
 The social graph is a graph that depicts personal relations of internet users.
@@ -14,7 +13,7 @@ Here is the example of social graph built by these scripts:
 
 ## dependencies
 
-These scripts written in **Python 3**, and has following external dependencies:
+These scripts has been written in **Python 3**, and has following external dependencies:
 * [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3
 * [networkx](https://networkx.github.io/) -- graph creation and manipulation
 * [matplotlib](http://matplotlib.org/) -- graph visualization
@@ -25,7 +24,7 @@ These scripts written in **Python 3**, and has following external dependencies:
   You can specify **number of UIDs** and set **recursion level** (get friends of friends). 
   It is possible to use **multiprocessing** to speed-up download.
 
-  Built graph can be stored in **Pickle or YAML format** (switch between them by output file extension).
+  Built graph can be stored in **Pickle** or **YAML** format (switch between them by output file extension).
 
 * [process.py](https://github.com/budnyjj/vkstat/blob/master/process.py) -- use it to cut 
   nodes, which have small number of common neighbors in graph. It can be useful to **reduce graph size** 
@@ -43,4 +42,4 @@ These scripts written in **Python 3**, and has following external dependencies:
 
 ## ideas and bug reports
 
-Send your ideas and code fixes to me: **budnyjj@pirates.by**.
+Send your ideas and bug reports/fixes to me: **budnyjj@pirates.by**.
