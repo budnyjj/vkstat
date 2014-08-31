@@ -16,14 +16,14 @@ Here is the example of social graph built by these scripts:
 
 These scripts written in **Python 3**, and has following external dependencies:
 * [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3
-* [networkx](https://networkx.github.io/) -- creation and manipulation of graph
+* [networkx](https://networkx.github.io/) -- graph creation and manipulation
 * [matplotlib](http://matplotlib.org/) -- graph visualization
 
 ## scripts
 
 * [get.py](https://github.com/budnyjj/vkstat/blob/master/get.py) -- use it for get data from vk.com.
-  You can specify *number of UIDs* and set *recursion level* (get friends of friends). 
-  It can use *multiprocessing* to speed-up download.
+  You can specify **number of UIDs** and set **recursion level** (get friends of friends). 
+  It is possible to use **multiprocessing** to speed-up download.
 
   Built graph can be stored in **Pickle or YAML format** (switch between them by output file extension).
 
@@ -32,8 +32,8 @@ These scripts written in **Python 3**, and has following external dependencies:
   and/or **convert graph files between YAML and pickle formats**.
 
 * [info.py](https://github.com/budnyjj/vkstat/blob/master/info.py) -- use it to analyze obtained graph.
-  Currently, this script can show graph *radius*, *diameter*, lists of *central* and *peripheral nodes*,
-  show *number of degrees per node*.
+  Currently, this script can show graph **radius**, **diameter**, lists of **central** and **periphery nodes**,
+  show **number of degrees per node**.
 
 * [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py) -- use it to plot result graph.
   You can *explore graph in interactive mode* or *write its representation to file* 
