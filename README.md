@@ -20,3 +20,8 @@ These scripts written in **Python 3**, and has following external dependencies:
 * [matplotlib](http://matplotlib.org/) -- graph visualization
 
 ## scripts
+
+* [get.py](https://github.com/budnyjj/vkstat/blob/master/get.py) -- use it for get data from vk.com.
+  You can specify number of UIDs and set recursion level (get friends of friends). 
+  It can use multiprocessing to speed-up download.
+
