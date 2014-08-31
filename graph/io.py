@@ -1,0 +1,32 @@
+# File input and output library for
+# reading and writing graph data  
+
+import pickle
+import networkx as nx
+
+# read graph from file
+def read_graph(filename):
+    graph = None
+
+    print('Read graph from {0} '.format(filename), end='')
+    if filename.endswith('.yaml'):
+        print("in YAML format")
+        graph = nx.read_yaml(filename)
+    else:
+        print("in pickle format")
+        with open(filename, 'rb') as f:
+            graph = pickle.load(f)
+    print()
+    return graph
+
+# write graph to file
+def write_graph(graph, filename):
+    print("Write constructed graph to: {0} ".format(filename), end="")
+    if filename.endswith('.yaml'):
+        print("in YAML format")
+        nx.write_yaml(graph, filename)
+    else:
+        print("in pickle format")
+        with open(filename, 'wb') as f:
+            pickle.dump(graph, f, protocol=pickle.HIGHEST_PROTOCOL)
+    print()

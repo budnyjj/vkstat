@@ -1,0 +1,21 @@
+# Various functions for printing various specific values
+# in human-readable format 
+
+import time
+
+# print timedelta, provided in seconds,
+# in human-readable format
+def print_elapsed_time(timedelta):
+    gm_timedelta = time.gmtime(timedelta)
+    hours = int(time.strftime("%H", gm_timedelta))
+    minutes = int(time.strftime("%M", gm_timedelta))
+    seconds = int(time.strftime("%S", gm_timedelta))
+
+    print('Total time elapsed: ', end='')
+    if hours > 0:
+        print('{0} hours, '.format(hours), end='')
+    if minutes > 0:
+        print('{0} minutes, '.format(minutes), end='')
+    
+    print('{0} seconds.'.format(seconds), end='')
+    print()
