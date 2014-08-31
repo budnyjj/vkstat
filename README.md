@@ -41,3 +41,6 @@ These scripts written in **Python 3**, and has following external dependencies:
 
   For perfomance reasons, I recommend you to **plot graphs with less than 500 nodes**.
 
+## ideas and bug reports
+
+Send your ideas and code fixes to me: **budnyjj@pirates.by**.
