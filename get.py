@@ -39,6 +39,9 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex'):
     '''get information (profile) about user with specified uid'''
     answer = None
     error_count = 0
+    # used to delay request with errors
+    time_to_sleep = random.uniform(0.05, 0.15)
+
     while True:
         try:
             # get only first element of list 
@@ -51,13 +54,20 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex'):
             error_count += 1
             print('E: profile {0}. ' \
                   'Now try again (#{1})...'.format(uid, error_count))
+            # Need to sleep due to vk.com bandwidth limitations
+            time.sleep(time_to_sleep)
+            # exponentially increase time_to_sleep
+            time_to_sleep *= 2
     return answer
 
 def get_friends(profile, req_fields = 'first_name, last_name, sex', 
-                max_err_count = 5):
+                max_err_count = 6):
     '''get list with friend profiles of user with specified profile'''
     answer = None
     error_count = 0
+    # used to delay request with errors
+    time_to_sleep = random.uniform(0.05, 0.15)
+
     while True:
         try:
             # get only first element of list 
@@ -77,9 +87,11 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
             if error_count < max_err_count:
                 print('Now try again (#{0})...'.format(error_count))
                 # Need to sleep due to vk.com bandwidth limitations
-                time.sleep(random.random())
+                time.sleep(time_to_sleep)
+                # exponentially increase time_to_sleep
+                time_to_sleep *= 2
             else:
-                print('\nReached maximal error count (#{0})! ' \
+                print('\nReached maximal error count ({0})! ' \
                       'Skipping...'.format(error_count))
                 return []
 

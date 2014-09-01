@@ -70,6 +70,7 @@ try:
     start_time = time.time()
     G = io.read_graph((args.path))
     nx.draw(G,
+            cmap = plt.cm.YlOrRd,
             labels = assign_labels(G),
             node_size = assign_node_sizes(G),
             node_color = assign_colors(G),
