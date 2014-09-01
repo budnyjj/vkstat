@@ -70,11 +70,12 @@ try:
     start_time = time.time()
     G = io.read_graph((args.path))
     nx.draw(G,
-            cmap = plt.cm.YlOrRd,
             labels = assign_labels(G),
+            with_labels=not args.no_labels,
+            cmap = plt.cm.YlOrRd,
             node_size = assign_node_sizes(G),
             node_color = assign_colors(G),
-            with_labels=not args.no_labels)
+            edge_color = 'y')
 
     if args.output:
         # store plot to file
