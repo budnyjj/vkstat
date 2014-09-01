@@ -1,5 +1,4 @@
 # vkstat
-## overview
 
 Collection of scripts for building and analyzing social graph based on vk.com API.
 The social graph is a graph that depicts personal relations of internet users.
@@ -14,30 +13,33 @@ Here is the example of social graph built by these scripts:
 
 ## dependencies
 
-These scripts written in **Python 3**, and has following external dependencies:
+These scripts has been written in **Python 3**, and has following external dependencies:
 * [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3
-* [networkx](https://networkx.github.io/) -- creation and manipulation of graph
+* [networkx](https://networkx.github.io/) -- graph creation and manipulation
 * [matplotlib](http://matplotlib.org/) -- graph visualization
 
 ## scripts
 
 * [get.py](https://github.com/budnyjj/vkstat/blob/master/get.py) -- use it for get data from vk.com.
-  You can specify *number of UIDs* and set *recursion level* (get friends of friends). 
-  It can use *multiprocessing* to speed-up download.
+  You can specify **number of UIDs** and set **recursion level** (get friends of friends). 
+  It is possible to use **multiprocessing** to speed-up download.
 
-  Built graph can be stored in Pickle or YAML format (switch between them by output file extension).
+  Built graph can be stored in **Pickle** or **YAML** format (switch between them by output file extension).
 
 * [process.py](https://github.com/budnyjj/vkstat/blob/master/process.py) -- use it to cut 
-  nodes, which have small number of common neighbors in graph. It can be useful to reduce graph size 
-  and increase visibility of obtained graph.
+  nodes, which have small number of common neighbors in graph. It can be useful to **reduce graph size** 
+  and/or **convert graph files between YAML and pickle formats**.
 
 * [info.py](https://github.com/budnyjj/vkstat/blob/master/info.py) -- use it to analyze obtained graph.
-  Currently, this script can show graph *radius*, *diameter*, lists of *central* and *peripheral nodes*,
-  show *number of degrees per node*.
+  Currently, this script can show graph **radius**, **diameter**, lists of **central** and **periphery nodes**,
+  show **number of degrees per node**.
 
 * [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py) -- use it to plot result graph.
-  You can *explore graph in interactive mode* or *write its representation to file* 
-  (.png or .pdf are currently supported). 
+  You can explore graph in interactive mode or write its representation to file 
+  (**.png** or **.pdf** are currently supported). 
 
-  For perfomance reasons, its recommended to plot graphs with less than 200 nodes.
+  For perfomance reasons, I recommend you to **plot graphs with less than 500 nodes**.
 
+## ideas and bug reports
+
+Send your ideas and bug reports/fixes to me: **budnyjj@pirates.by**.
