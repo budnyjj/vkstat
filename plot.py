@@ -22,7 +22,7 @@ def assign_labels(graph):
                   " in {1}".format(e, node[0]))
     return labels
 
-def assign_colors(graph):
+def assign_node_colors(graph):
     '''assign colors to nodes by total number of friends'''
     color_list = []
     for node in graph.nodes_iter(data=True):
@@ -41,6 +41,18 @@ def assign_node_sizes(graph, default_size = 100):
         sizes.append((1 + graph.degree(node)) * default_size)
     return sizes
 
+def assign_edge_colors(graph):
+    '''highlight edges from central nodes'''
+    color_list = []
+    central_nodes = set(nx.center(G))
+    for edge in G.edges_iter():
+        if ((edge[0] in central_nodes) or
+            (edge[1] in central_nodes)):
+            color_list.append('r')
+        else:
+            color_list.append('y')
+    return color_list
+
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 parser.add_argument('path', type=str,
                     help='path to file which contains graph data.')
@@ -51,7 +63,6 @@ parser.add_argument('--with-latex', action='store_true',
 parser.add_argument('--no-labels', action='store_true',
                     help='draw graph without labels')
 parser.add_argument('--dpi', type=int, help='set dpi')
-
 
 args = parser.parse_args()
 
@@ -69,13 +80,15 @@ import matplotlib.pyplot as plt
 try:
     start_time = time.time()
     G = io.read_graph((args.path))
+    
     nx.draw(G,
             labels = assign_labels(G),
             with_labels=not args.no_labels,
             cmap = plt.cm.YlOrRd,
             node_size = assign_node_sizes(G),
-            node_color = assign_colors(G),
-            edge_color = 'y')
+            node_color = assign_node_colors(G),
+            edge_color = assign_edge_colors(G),
+    )
 
     if args.output:
         # store plot to file
@@ -86,4 +99,4 @@ try:
         gprint.print_elapsed_time(time.time() - start_time)
         plt.show()
 except FileNotFoundError:
-    print("Please, specify existing YAML source!")
+    print("Please, specify existing graph source!")
