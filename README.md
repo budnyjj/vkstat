@@ -14,12 +14,14 @@ Here is the example of social graph built by these scripts (without data about i
 In this graph, **node size** shows **number of common friends** (which is equal to node degree) --
 the more common friends node has, the larger it is.
 
-**Node color** depends on **total number of friends** (not only common) -- 
+The **node color** depends on **total number of friends** (not only common) -- 
 the more friends node has, the darker it is. Nodes, which coloured in yellow, 
 have unknown total number of friends. 
 
-**Edge color** depend on **position of the node** in graph: edges from central nodes are coloured in
+The **edge color** depends on **position of the node** in graph: edges from central nodes are coloured in
 red, while rest edges are coloured in yellow.
+
+The **node label** contains information about profile (currently, it is user name, specified in profile).
 
 ## dependencies
 
