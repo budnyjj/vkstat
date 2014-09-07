@@ -54,7 +54,7 @@ def assign_edge_colors(graph):
     return color_list
 
 parser = argparse.ArgumentParser(description=DESCRIPTION)
-parser.add_argument('path', type=str,
+parser.add_argument('path', metavar='SOURCE',type=str,
                     help='path to file which contains graph data.')
 parser.add_argument('-o', '--output', type=str,
                     help='path to file for writing plot image')

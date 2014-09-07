@@ -69,7 +69,7 @@ DESCRIPTION = 'Print characteristics of specified NetworkX graph'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument('path', metavar='path', type=str,
+    parser.add_argument('path', metavar='PATH', type=str,
                         help='path to YAML file which contains graph data')
     parser.add_argument("-r", "--radius", help="calculate graph radius",
                     action="store_true")

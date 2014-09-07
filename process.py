@@ -8,9 +8,8 @@ import time
 import graph.io as io
 import graph.printing as gprint
 
-DESCRIPTION = 'Load NX graph from YAML file' \
-              'process it by specified cli options' \
-              'and save it to YAML file.'
+DESCRIPTION = 'Load NX graph from SOURCE, ' \
+              'process, and save it to DESTINATION.'
 
 DEFAULT_TRIM = 1
 
