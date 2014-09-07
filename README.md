@@ -7,9 +7,21 @@ Users of the social network are presented as nodes, friendship relations between
 With a help of scripts from this collection you can build graphs based on data from vk.com,
 process, analyze and plot them.
 
-Here is the example of social graph built by these scripts:
+Here is the example of social graph built by these scripts (without data about individuals):
 ![Example of social graph]
 (https://github.com/budnyjj/vkstat/blob/master/examples/one.png)
+
+In this graph, **node size** shows **number of common friends** (which is equal to node degree) --
+the more common friends node has, the larger it is.
+
+The **node color** depends on **total number of friends** (not only common) -- 
+the more friends node has, the darker it is. Nodes, which coloured in yellow, 
+have unknown total number of friends. 
+
+The **edge color** depends on **position of the node** in graph: edges from central nodes are coloured in
+red, while rest edges are coloured in yellow.
+
+The **node label** contains information about profile (currently, it is user name, specified in profile).
 
 ## dependencies
 
