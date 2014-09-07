@@ -32,6 +32,12 @@ These scripts has been written in **Python 3**, and has following external depen
 
 ## scripts
 
+```bash
+get.py --> process.py ---> plot.py
+                       |
+                       --> info.py
+```
+
 * [get.py](https://github.com/budnyjj/vkstat/blob/master/get.py) -- use it for get data from vk.com.
   You can specify **number of UIDs** and set **recursion level** (get friends of friends). 
   It is possible to use **multiprocessing** to speed-up download.
