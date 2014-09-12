@@ -1,4 +1,4 @@
-#!/usr/sbin/python
+#!/usr/sbin/python3
 # -*- coding: utf-8 -*-
 
 import argparse
