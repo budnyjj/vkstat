@@ -5,3 +5,5 @@
   + Взвесить ребра через число лайков постов на страницах
   + Посчитать average clustering coefficient: http://en.wikipedia.org/wiki/Clustering_coefficient
 * BUGS
+  + Убрать ImportError: yaml
+  + Использовать virtualenv для python3
