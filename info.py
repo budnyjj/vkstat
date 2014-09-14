@@ -81,15 +81,14 @@ if __name__ == '__main__':
                     action="store_true")
     parser.add_argument("--degrees", help="print node degrees",
                     action="store_true")
-    parser.add_argument("--genders", help="print profiles genders",
-                    action="store_true")
+    # parser.add_argument("--genders", help="print profiles genders",
+    #                 action="store_true")
 
     args = parser.parse_args()
     
     try:
         start_time = time.time()
     
-        print("Load graph from {0}...".format(args.path))
         G = io.read_graph(args.path)
     
         print("Precompute data structures...")
@@ -119,8 +118,10 @@ if __name__ == '__main__':
         # if args.genders:
         #     print_genders(G)
 
-        gprint.print_elapsed_time(time.time() - start_time)
     except FileNotFoundError:
-        print("Please, specify existing YAML source!")
-    
+        print("No such file or directory! Quitting...")
+    except IOError:
+        print("IOError happened! Quitting...")
+    else:
+        gprint.print_elapsed_time(time.time() - start_time)    
 

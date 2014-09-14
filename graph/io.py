@@ -4,29 +4,43 @@
 import pickle
 import networkx as nx
 
-# read graph from file
 def read_graph(filename):
+    ''' Read graph from file, raise IOError if cannot do it '''
     graph = None
 
-    print('Read graph from {0} '.format(filename), end='')
     if filename.endswith('.yaml'):
-        print("in YAML format")
-        graph = nx.read_yaml(filename)
+        try:
+            import yaml
+        except ImportError as e:
+            print('E: cannot read graph from file in YAML format.')
+            print('Please install PyYAML or other similar package '\
+                  'to use this functionality.')
+            raise IOError
+        else:
+            print('Read graph from {0} in YAML format'.format(filename))
+            graph = nx.read_yaml(filename)
     else:
-        print("in pickle format")
+        print('Read graph from {0} in pickle format'.format(filename))
         with open(filename, 'rb') as f:
             graph = pickle.load(f)
-    print()
     return graph
 
-# write graph to file
 def write_graph(graph, filename):
-    print("Write constructed graph to: {0} ".format(filename), end="")
+    ''' Write graph to file, raise IOError if cannot do it '''
     if filename.endswith('.yaml'):
-        print("in YAML format")
-        nx.write_yaml(graph, filename)
+        try:
+            import yaml
+        except ImportError as e:
+            print('E: cannot write graph to file in YAML format.')
+            print('Please install PyYAML or other similar package '\
+                  'to use this functionality.')
+            raise IOError
+        else:
+            print("Write constructed graph to: {0} "\
+                  "in YAML format".format(filename))
+            nx.write_yaml(graph, filename)
     else:
-        print("in pickle format")
+        print("Write constructed graph to: {0} "\
+              "in pickle format".format(filename))
         with open(filename, 'wb') as f:
             pickle.dump(graph, f, protocol=pickle.HIGHEST_PROTOCOL)
-    print()

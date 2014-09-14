@@ -4,7 +4,6 @@
 import argparse
 import vkontakte
 import networkx as nx
-import yaml
 import time
 import copy
 import functools
@@ -16,27 +15,25 @@ import graph.io as io
 import graph.printing as gprint
 
 def write_time_profiling_data(profiler, filename):
-    '''write time profiling data to file'''
+    '''Write time profiling data to file.'''
     ps = pstats.Stats(profiler)
     print("Write time profiling information " \
           "to: {0}.\n".format(filename))
     ps.dump_stats(filename)
 
 def args_are_valid(args):
-    '''cli arguments validation'''
-    are_valid = True
+    '''Validate cli arguments. Raise ValueError if they are not correct.'''
     if args.recursion_level <= 0:
-        are_valid = False
         print("Recursion level should be greater than zero!\n")
+        raise ValueError
     elif args.pool_size <= 0:
         print("Pool size should be greater than zero!\n")
-        are_valid = False
+        raise ValueError
     else:
         print("Provided arguments are seem to be correct...\n")
-    return are_valid
  
 def get_profile(uid, req_fields = 'first_name, last_name, sex'):
-    '''get information (profile) about user with specified uid'''
+    '''Get information (profile) about user with specified uid.'''
     answer = None
     error_count = 0
     # used to delay request with errors
@@ -352,7 +349,8 @@ if __name__ == '__main__':
     # parse cli options
     args = parser.parse_args()
 
-    if args_are_valid(args):
+    try:
+        args_are_valid(args)
         start_time = time.time()
         
         if args.time_profiling:
@@ -377,6 +375,9 @@ if __name__ == '__main__':
         if args.time_profiling:
             write_time_profiling_data(time_profiler, args.time_profiling)
 
-        gprint.print_elapsed_time(time.time() - start_time)
+    except ValueError:
+        print("ValueError happened! Quitting...")
+    except IOError:
+        print("IOError happened! Quitting...")
     else:
-        print("Some errors happened. Quitting...")
+        gprint.print_elapsed_time(time.time() - start_time)

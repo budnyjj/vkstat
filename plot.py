@@ -99,4 +99,6 @@ try:
         gprint.print_elapsed_time(time.time() - start_time)
         plt.show()
 except FileNotFoundError:
-    print("Please, specify existing graph source!")
+    print("No such file or directory! Quitting...")
+except IOError:
+    print("IOError happened! Quitting...")

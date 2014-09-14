@@ -59,10 +59,12 @@ if __name__ == '__main__':
         print(nx.info(G), "\n")
             
         io.write_graph(G, args.dst)
-    except FileNotFoundError as e:
-        print(e)
-
-    gprint.print_elapsed_time(time.time() - start_time)
+    except FileNotFoundError:
+        print("No such file or directory! Quitting...")
+    except IOError:
+        print("IOError happened! Quitting...")
+    else:
+        gprint.print_elapsed_time(time.time() - start_time)
 
 
 
