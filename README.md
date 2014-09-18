@@ -26,9 +26,10 @@ The **node label** contains information about profile (currently, it is user nam
 ## dependencies
 
 These scripts has been written in **Python 3**, and has following external dependencies:
-* [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3
-* [networkx](https://networkx.github.io/) -- graph creation and manipulation
-* [matplotlib](http://matplotlib.org/) -- graph visualization
+* [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3 (required)
+* [networkx](https://networkx.github.io/) -- graph creation and manipulation (required)
+* [matplotlib](http://matplotlib.org/) -- graph visualization (required)
+* [PyYAML](https://pypi.python.org/pypi/PyYAML) -- read/write graph in YAML format (optional) 
 
 ## scripts
 
