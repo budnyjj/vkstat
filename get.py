@@ -32,65 +32,93 @@ def args_are_valid(args):
     else:
         print("Provided arguments are seem to be correct...\n")
  
-def get_profile(uid, req_fields = 'first_name, last_name, sex'):
+def get_profile(uid, req_fields = 'first_name, last_name, sex',
+                max_err_count = 5):
     '''Get information (profile) about user with specified uid.'''
     answer = None
     error_count = 0
     # used to delay request with errors
-    time_to_sleep = random.uniform(0.05, 0.15)
+    time_to_sleep = random.uniform(0.1, 0.2)
 
     while True:
         try:
             # get only first element of list 
             answer = VK.getProfiles(uids = uid,
                                     fields = req_fields)[0]
+        except vkontakte.VKError as e:
+            print('E: profile {}:'.format(uid))
+            if e.code == 6:
+                error_count += 1
+                if error_count <= max_err_count:
+                    print('   Now try again (#{})...'.format(error_count))
+                    # Need to sleep due to vk.com bandwidth limitations
+                    time.sleep(time_to_sleep)
+                    # exponentially increase time_to_sleep
+                    time_to_sleep *= 2
+                else:
+                    print('   Reached maximal bandwith error count ({0})! '\
+                          'Skip...'.format(error_count))
+                    return []
+            else:
+                print('   {}.'.format(e.description))
+                return []
+
+        except Exception as e:
+            print('E: profile {}:'.format(uid))
+            print('   {}.'.format(e))
+            return []
+
+        else:
             print('S: profile {uid}: ' \
                   '{first_name} {last_name}.'.format(**answer))
             break
-        except vkontakte.VKError:
-            error_count += 1
-            print('E: profile {0}. ' \
-                  'Now try again (#{1})...'.format(uid, error_count))
-            # Need to sleep due to vk.com bandwidth limitations
-            time.sleep(time_to_sleep)
-            # exponentially increase time_to_sleep
-            time_to_sleep *= 2
     return answer
 
 def get_friends(profile, req_fields = 'first_name, last_name, sex', 
-                max_err_count = 6):
+                max_err_count = 5):
     '''get list with friend profiles of user with specified profile'''
     answer = None
     error_count = 0
     # used to delay request with errors
-    time_to_sleep = random.uniform(0.05, 0.15)
+    time_to_sleep = random.uniform(0.1, 0.2)
 
     while True:
         try:
             # get only first element of list 
             answer = VK.friends.get(uid = profile['uid'],
                                     fields = req_fields)
+        except vkontakte.VKError as e:
+            print('E: friends of {uid} '\
+                  '({first_name} {last_name}):'.format(**profile))
+            if e.code == 6: # bandwith limitations
+                error_count += 1
+                print('   Vk.com bandwith limitations. ', end='')
+                if error_count <= max_err_count:
+                    print('Try again (#{0})...'.format(error_count))
+                    # Need to sleep due to vk.com bandwidth limitations
+                    time.sleep(time_to_sleep)
+                    # exponentially increase time_to_sleep
+                    time_to_sleep *= 2
+                else:
+                    print('   Reached maximal bandwith error count ({0})! '\
+                          'Skip...'.format(error_count))
+                    return []
 
-            print('S: {number} friend profiles of {uid}: ' \
+            else:
+                print('   {}.'.format(e.description))
+                return []
+
+        except Exception as e: # unknown error occured 
+            print('E: friends of {uid} '\
+                  '({first_name} {last_name}):'.format(**profile))
+            print('   {}.'.format(e))
+            return []
+
+        else: # got friends without errors
+            print('S: {number} friends of {uid}: ' \
                   '({first_name} {last_name}).'.format(
                       number = len(answer), **profile))
-
             break
-        except:
-            error_count += 1
-            print('E: friends of {uid} ' \
-                  '({first_name} {last_name}). '.format(**profile),
-                  end = "")
-            if error_count < max_err_count:
-                print('Now try again (#{0})...'.format(error_count))
-                # Need to sleep due to vk.com bandwidth limitations
-                time.sleep(time_to_sleep)
-                # exponentially increase time_to_sleep
-                time_to_sleep *= 2
-            else:
-                print('\nReached maximal error count ({0})! ' \
-                      'Skipping...'.format(error_count))
-                return []
 
     return answer
 
