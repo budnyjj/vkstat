@@ -6,4 +6,4 @@
   + Посчитать average clustering coefficient: http://en.wikipedia.org/wiki/Clustering_coefficient
 * BUGS
   + Сделать обработку VKError ошибок в зависимости от кода ошибки.
-
+  + Добавить matplotlib, networkx, PyYAML в зависимости.
