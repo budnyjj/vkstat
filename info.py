@@ -65,6 +65,51 @@ def print_degrees(graph):
         print("{:<50}{:5}".format(node_name, node[1]['degree']))
     print()
 
+def print_num_friends(graph):
+    '''pretty print node number of friends (and followers, if exists)'''
+    INF = 99999
+
+    def sort_by_friends_total(node):
+        return node[1]['friends_total']
+
+    def sort_by_followers_per_friends(node):
+        return node[1]['followers_per_friends']
+
+    # collect nodes only with 'friends_total'
+    nodes = []
+    for node in graph.nodes(data=True):
+        if (('friends_total' in node[1]) and
+            (node[1]['friends_total'] > 0)):
+            nodes.append(node)
+
+    for node in nodes:
+        node[1]['is_activist'] = ''
+        if 'followers_total' not in node[1]:
+            node[1]['followers_total'] = 0
+            node[1]['followers_per_friends'] = 0
+        else:
+            followers_per_friends = node[1]['followers_total'] / node[1]['friends_total']
+            node[1]['followers_per_friends'] = node[1]['followers_total'] / node[1]['friends_total']
+
+            if ((node[1]['friends_total'] > 500) and (followers_per_friends < 0.2)):
+                node[1]['is_activist'] = 'Yes'
+
+    nodes.sort(key = sort_by_friends_total, reverse=True)
+
+    print("{:<40}{:15}{:15}{:10}{:15}".format("Node", "Friends", 
+                                              "Followers", "Fl/Fr", "Is Activist?"))
+    for node in nodes:        
+        node_name = "{} {} ({})".format(node[1]['first_name'], 
+                                        node[1]['last_name'],
+                                        node[0])
+        print("{:<40}{:<15}{:<15}{:<10.4f}{:<15}".format(node_name, 
+                                                         node[1]['friends_total'], 
+                                                         node[1]['followers_total'],
+                                                         node[1]['followers_per_friends'],
+                                                         node[1]['is_activist']))
+    print()
+
+
 DESCRIPTION = 'Print characteristics of specified NetworkX graph'
 
 if __name__ == '__main__':
@@ -81,8 +126,8 @@ if __name__ == '__main__':
                     action="store_true")
     parser.add_argument("--degrees", help="print node degrees",
                     action="store_true")
-    # parser.add_argument("--genders", help="print profiles genders",
-    #                 action="store_true")
+    parser.add_argument("--num-friends", help="print total number friends (and followers)",
+                    action="store_true")
 
     args = parser.parse_args()
     
@@ -115,8 +160,8 @@ if __name__ == '__main__':
         if args.degrees:
             print_degrees(G)
 
-        # if args.genders:
-        #     print_genders(G)
+        if args.num_friends:
+            print_num_friends(G)
 
     except FileNotFoundError:
         print("No such file or directory! Quitting...")

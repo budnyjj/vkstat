@@ -49,14 +49,15 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
             print('E: profile {}:'.format(uid))
             if e.code == 6:
                 error_count += 1
+                print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('   Now try again (#{})...'.format(error_count))
+                    print('Now try again (#{})...'.format(error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
                     # exponentially increase time_to_sleep
                     time_to_sleep *= 2
                 else:
-                    print('   Reached maximal bandwith error count ({0})! '\
+                    print('Reached maximal bandwith error count ({0})! '\
                           'Skip...'.format(error_count))
                     return []
             else:
@@ -71,12 +72,11 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
         else:
             print('S: profile {uid}: ' \
                   '{first_name} {last_name}.'.format(**answer))
-            break
-    return answer
+            return answer
 
 def get_friends(profile, req_fields = 'first_name, last_name, sex', 
                 max_err_count = 5):
-    '''get list with friend profiles of user with specified profile'''
+    '''Get list with friend profiles of user with specified profile'''
     answer = None
     error_count = 0
     # used to delay request with errors
@@ -118,12 +118,49 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
             print('S: {number} friends of {uid}: ' \
                   '({first_name} {last_name}).'.format(
                       number = len(answer), **profile))
-            break
+            return answer
 
-    return answer
+def get_num_followers(uid, max_err_count = 5):
+    '''Get number of followers of user with specified UID.
+    Return -1 if cannot do so. '''
+    answer = None
+    error_count = 0
+    # used to delay request with errors
+    time_to_sleep = random.uniform(0.1, 0.2)
+
+    while True:
+        try:
+            answer = VK.subscriptions.getFollowers(uid = uid,
+                                                   count = 0)['count']
+        except vkontakte.VKError as e:
+            print('E: followers of {}:'.format(uid))
+            if e.code == 6:
+                error_count += 1
+                print('   Vk.com bandwith limitations. ', end='')
+                if error_count <= max_err_count:
+                    print('Now try again (#{})...'.format(error_count))
+                    # Need to sleep due to vk.com bandwidth limitations
+                    time.sleep(time_to_sleep)
+                    # exponentially increase time_to_sleep
+                    time_to_sleep *= 2
+                else:
+                    print('Reached maximal bandwith error count ({0})! '\
+                          'Skip...'.format(error_count))
+                    return -1
+            else:
+                print('   {}.'.format(e.description))
+                return -1
+
+        except Exception as e:
+            print('E: followers of {}:'.format(uid))
+            print('   {}.'.format(e))
+            return -1
+        else:
+            print('S: user {} has {} followers.'.format(uid, answer))
+            return answer
 
 def strip_attributes(node, preserve_attrs):
-    '''strip unnecessary data attributes from node'''
+    '''Strip unnecessary data attributes from node'''
     node_attrs = list(node[1].keys())
     for attr in node_attrs:
         if attr not in preserve_attrs:
@@ -144,6 +181,7 @@ def build_edges(src_profile, dst_profiles):
 def construct_graph(uids, required_attributes = ('first_name',
                                                  'last_name',
                                                  'sex'),
+                    with_num_followers = False,
                     max_recursion_level = 1, pool_size = 1,
                     time_profiler = None):
     '''get and build graph data for specified uids'''
@@ -203,6 +241,41 @@ def construct_graph(uids, required_attributes = ('first_name',
               "of recursion.\n".format(sum(map(len, friend_profiles))))
 
         return friend_profiles
+
+    # get information about user (node) followers and append it to nodes
+    # using get_num_followers in multiple processes
+    def _get_num_followers(nodes):
+        # full list of user uids
+        all_uids = [node[0] for node in nodes]
+
+        # uids of users with 'friends_total' 
+        uids_with_friends_total = [node[0] for node in nodes if 'friends_total' in node[1]]
+
+        # list of user uids, contains only nodes with 'friends_total'
+        num_followers_per_uid = []
+
+        if pool_size == 1:
+            # no need to organize pool
+            num_followers_per_uid = list(map(get_num_followers, uids_with_friends_total))
+        else:
+            # disable profiling, because of new fork processes
+            if time_profiler:
+                time_profiler.disable()
+
+            # organize multiprocess calculations
+            with Pool(processes=pool_size) as pool:
+                num_followers_per_uid = list(pool.map(get_num_followers,
+                                                      uids_with_friends_total))
+            # enable profiling
+            if time_profiler:
+                time_profiler.enable()
+
+        # append number of followers to nodes
+        for i,num_followers in enumerate(num_followers_per_uid):
+            if num_followers >= 0:
+                # quick and dirty solution
+                req_index = all_uids.index(all_uids[i])
+                nodes[req_index][1]['followers_total'] = num_followers
 
     # convert list of lists to list
     def _flatten(list_of_lists):
@@ -326,7 +399,12 @@ def construct_graph(uids, required_attributes = ('first_name',
 
     _strip_attributes(gd_accumulator['nodes'], required_attributes)
 
-    print("Build graph with obtained data...\n")
+    # Get number of followers
+    if with_num_followers:
+        print("Get number of followers per user...\n")
+        _get_num_followers(gd_accumulator['nodes'])
+
+    print("\nBuild graph with obtained data...\n")
     graph = nx.Graph()
 
     graph.add_nodes_from(gd_accumulator['nodes'])
@@ -370,6 +448,8 @@ if __name__ == '__main__':
     parser.add_argument('--data-attributes', metavar='ATTR', type=str,
                         nargs='+', default=DEFAULT_ATTRIBUTES,
                         help='attributes for requesting from vk.com')
+    parser.add_argument('--with-num-followers', action='store_true',
+                        help='get number of followers per user')
     parser.add_argument('--time-profiling', metavar='PATH', type=str,
                         help='write speed profile in pStats' \
                         'compatible format to file, specified by PATH')
@@ -392,6 +472,7 @@ if __name__ == '__main__':
        
         G = construct_graph(uids = args.uids,
                             required_attributes = tuple(args.data_attributes),
+                            with_num_followers = args.with_num_followers,
                             max_recursion_level = args.recursion_level,
                             pool_size = args.pool_size,
                             time_profiler = time_profiler)

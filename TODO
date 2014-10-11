@@ -1,9 +1,12 @@
 * IMPROVEMENTS
 ** SPEED
 
-* INTERESTING
+** INTERESTING
   + Взвесить ребра через число лайков постов на страницах
   + Посчитать average clustering coefficient: http://en.wikipedia.org/wiki/Clustering_coefficient
-* BUGS
-  + Сделать обработку VKError ошибок в зависимости от кода ошибки.
+
+** BUGS
+  + Сделать UIDs стандартным аргументом для функций получения данных.
+  + Оптимизировать процесс адресации при добавлении total_followers к нодам.
+  + Разослать желающим списки числа друзей/активистов для нормировки
 
