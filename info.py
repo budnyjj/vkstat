@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import argparse
-import networkx as nx
 import time
+
+try:
+    import networkx as nx
+except ImportError:
+    print("This script needs NetworkX! Please, install it.")
+    exit(1)
 
 import graph.io as io
 import graph.printing as gprint
@@ -109,7 +115,10 @@ def print_num_friends(graph):
                                                          node[1]['is_activist']))
     print()
 
+def print_pagerank(G):
+    print(nx.pagerank(G))
 
+    
 DESCRIPTION = 'Print characteristics of specified NetworkX graph'
 
 if __name__ == '__main__':
@@ -128,7 +137,9 @@ if __name__ == '__main__':
                     action="store_true")
     parser.add_argument("--num-friends", help="print total number friends (and followers)",
                     action="store_true")
-
+    parser.add_argument("--pagerank", help="print pagerank",
+                        action="store_true")
+    
     args = parser.parse_args()
     
     try:
@@ -163,6 +174,9 @@ if __name__ == '__main__':
         if args.num_friends:
             print_num_friends(G)
 
+        if args.pagerank:
+            print_page_rank(G)
+            
     except FileNotFoundError:
         print("No such file or directory! Quitting...")
     except IOError:
