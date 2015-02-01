@@ -66,8 +66,8 @@ def print_degrees(graph):
     print("{:<49}{:10}".format("Node", "Degree"))
     for node in nodes:
         node_name = "{} {} ({})".format(node[1]['first_name'], 
-                                   node[1]['last_name'],
-                                   node[0])
+                                        node[1]['last_name'],
+                                        node[0])
         print("{:<50}{:5}".format(node_name, node[1]['degree']))
     print()
 
@@ -115,72 +115,94 @@ def print_num_friends(graph):
                                                          node[1]['is_activist']))
     print()
 
-def print_pagerank(G):
-    print(nx.pagerank(G))
+def print_pagerank(graph):
+    def sort_by_pagerank(pair_uid_pagerank):
+        return pair_uid_pagerank[1]
+    
+    print("{:<40}{:15}".format("Node", "Pagerank"))
 
+    pageranks = nx.pagerank(graph).items()
+    for uid, pagerank in sorted(pageranks, key=sort_by_pagerank, reverse=True):
+        node_name = "{} {} ({})".format(graph.node[uid]['first_name'],
+                                        graph.node[uid]['last_name'],
+                                        uid)
+        print("{:<40}{:<15}".format(node_name, pagerank))
+
+    print()
     
 DESCRIPTION = 'Print characteristics of specified NetworkX graph'
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument('path', metavar='PATH', type=str,
-                        help='path to YAML file which contains graph data')
-    parser.add_argument("-r", "--radius", help="calculate graph radius",
+parser = argparse.ArgumentParser(description=DESCRIPTION)
+parser.add_argument('path', metavar='PATH', type=str,
+                    help='path to YAML file which contains graph data')
+parser.add_argument("-r", "--radius", help="calculate graph radius",
                     action="store_true")
-    parser.add_argument("-d", "--diameter", help="calculate graph diameter",
+parser.add_argument("-d", "--diameter", help="calculate graph diameter",
                     action="store_true")
-    parser.add_argument("--central", help="print central nodes",
+parser.add_argument("--central", help="print central nodes",
                     action="store_true")
-    parser.add_argument("--periphery", help="print periphery nodes",
+parser.add_argument("--periphery", help="print periphery nodes",
                     action="store_true")
-    parser.add_argument("--degrees", help="print node degrees",
+parser.add_argument("--degrees", help="print node degrees",
                     action="store_true")
-    parser.add_argument("--num-friends", help="print total number friends (and followers)",
+parser.add_argument("--num-friends", help="print total number friends (and followers)",
                     action="store_true")
-    parser.add_argument("--pagerank", help="print pagerank",
+parser.add_argument("--pagerank", help="print pagerank",
+                    action="store_true")
+parser.add_argument("--pagerank", help="print pagerank",
                         action="store_true")
     
-    args = parser.parse_args()
+args = parser.parse_args()
     
-    try:
-        start_time = time.time()
+try:
+    start_time = time.time()
     
-        G = io.read_graph(args.path)
+    G = io.read_graph(args.path)
     
-        print("Precompute data structures...")
+    print("Precompute data structures...")
 
-        # nodes_data = {'uid': {'attr1': 'val1', ...}}
-        nodes_data = precompute_node_data(G)
+try:
+    start_time = time.time()
 
-        print("Calculate required values...\n")        
+    G = io.read_graph(args.path)
 
-        print(nx.info(G), "\n")
+    print("Precompute data structures...")
 
-        if args.radius:
-            print("Graph radius: {0}\n".format(nx.radius(G)))
+    # nodes_data = {'uid': {'attr1': 'val1', ...}}
+    nodes_data = precompute_node_data(G)
+
+    print("Calculate required values...\n")        
+
+    print(nx.info(G), "\n")
+
+    if args.radius:
+        print("Graph radius: {0}\n".format(nx.radius(G)))
+    
+    if args.central:
+        print_central_nodes(nx.center(G), nodes_data)
+
+    if args.diameter:
+        print("Graph diameter: {0}\n".format(nx.diameter(G)))
+
+    if args.pagerank:
+        print_page_rank(G)
+    
+    if args.periphery:
+        print_periphery_nodes(nx.periphery(G), nodes_data)
+
+    if args.degrees:
+        print_degrees(G)
+
+    if args.num_friends:
+        print_num_friends(G)
+
+    if args.pagerank:
+        print_pagerank(G)
         
-        if args.central:
-            print_central_nodes(nx.center(G), nodes_data)
-
-        if args.diameter:
-            print("Graph diameter: {0}\n".format(nx.diameter(G)))
-
-        if args.periphery:
-            print_periphery_nodes(nx.periphery(G), nodes_data)
-
-        if args.degrees:
-            print_degrees(G)
-
-        if args.num_friends:
-            print_num_friends(G)
-
-        if args.pagerank:
-            print_page_rank(G)
-            
-    except FileNotFoundError:
-        print("No such file or directory! Quitting...")
-    except IOError:
-        print("IOError happened! Quitting...")
-    else:
-        gprint.print_elapsed_time(time.time() - start_time)    
+except FileNotFoundError:
+    print("No such file or directory! Quitting...")
+except IOError:
+    print("IOError happened! Quitting...")
+else:
+    gprint.print_elapsed_time(time.time() - start_time)    
 

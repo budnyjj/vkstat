@@ -84,6 +84,7 @@ if args.with_latex:
     rc('text.latex', preamble = '\\usepackage[russian]{babel}')
 
 import matplotlib.pyplot as plt
+plt.switch_backend('GTK3Cairo')
 
 try:
     start_time = time.time()
