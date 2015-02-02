@@ -22,7 +22,7 @@ except ImportError:
     exit(1)
 
 import graph.io as io
-import graph.printing as gprint
+import utils.print as gprint
 
 def write_time_profiling_data(profiler, filename):
     '''Write time profiling data to file.'''

@@ -12,7 +12,7 @@ except ImportError:
     exit(1)
 
 import graph.io as io
-import graph.printing as gprint
+import utils.print as gprint
 
 DESCRIPTION = 'Plot NetworkX graph which specified in YAML file'
 

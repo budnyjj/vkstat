@@ -12,7 +12,7 @@ except ImportError:
     exit(1)
 
 import graph.io as io
-import graph.printing as gprint
+import utils.print as gprint
 
 def precompute_node_data(graph):
     '''store information about nodes in dict keyed by UID'''
@@ -149,18 +149,9 @@ parser.add_argument("--num-friends", help="print total number friends (and follo
                     action="store_true")
 parser.add_argument("--pagerank", help="print pagerank",
                     action="store_true")
-parser.add_argument("--pagerank", help="print pagerank",
-                        action="store_true")
     
 args = parser.parse_args()
     
-try:
-    start_time = time.time()
-    
-    G = io.read_graph(args.path)
-    
-    print("Precompute data structures...")
-
 try:
     start_time = time.time()
 
