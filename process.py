@@ -7,7 +7,8 @@ import time
 try:
     import networkx as nx
 except ImportError:
-    print("NetworkX is required to run this script.")
+    print("This script requires NetworkX to be installed.")
+    exit(1)
 
 import graph.io as io
 import graph.printing as gprint

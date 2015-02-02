@@ -5,13 +5,14 @@ import sys
 import time
 import pprint
 
-# pretty print 
+# pretty print object
+pp = pprint.PrettyPrinter(indent = 4)
+
 def pretty_print(value):
-    pp = pprint.PrettyPrinter(indent = 4)
     pp.pprint(value)
 
 # print timedelta, provided in seconds,
-# in human-readawidthble format
+# in human-readable format
 def print_elapsed_time(timedelta):
     gm_timedelta = time.gmtime(timedelta)
     hours = int(time.strftime("%H", gm_timedelta))
@@ -28,7 +29,7 @@ def print_elapsed_time(timedelta):
     print()
 
 # print progress bar in form: "[###-------]"
-def print_progress(cur_value, max_value, width=42):
+def print_progress(cur_value, max_value, width=72):
     progress = int((cur_value * 100) / max_value)
 
     # effective width -- width of bar without brackets

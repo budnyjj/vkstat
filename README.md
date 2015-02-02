@@ -11,10 +11,10 @@ Here is the example of social graph built by these scripts (without data about i
 ![Example of social graph]
 (https://github.com/budnyjj/vkstat/blob/master/examples/one.png)
 
-In this graph, **node size** shows **number of common friends** (which is equal to node degree) --
+In this graph, **node size** shows **total number friends in network** (not only common) --
 the more common friends node has, the larger it is.
 
-The **node color** depends on **total number of friends** (not only common) -- 
+The **node color** depends on **number of common friends** (which is equal to node degree) -- 
 the more friends node has, the darker it is. Nodes, which coloured in yellow, 
 have unknown total number of friends. 
 

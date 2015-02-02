@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import argparse
 import time
 
 try:
     import networkx as nx
 except ImportError:
-    print("NetworkX is required to run this script.")
+    print("This script requires NetworkX library to be installed.")
+    exit(1)
 
 import graph.io as io
 import graph.printing as gprint
@@ -147,8 +149,17 @@ parser.add_argument("--num-friends", help="print total number friends (and follo
                     action="store_true")
 parser.add_argument("--pagerank", help="print pagerank",
                     action="store_true")
-
+parser.add_argument("--pagerank", help="print pagerank",
+                        action="store_true")
+    
 args = parser.parse_args()
+    
+try:
+    start_time = time.time()
+    
+    G = io.read_graph(args.path)
+    
+    print("Precompute data structures...")
 
 try:
     start_time = time.time()
@@ -173,6 +184,9 @@ try:
     if args.diameter:
         print("Graph diameter: {0}\n".format(nx.diameter(G)))
 
+    if args.pagerank:
+        print_page_rank(G)
+    
     if args.periphery:
         print_periphery_nodes(nx.periphery(G), nodes_data)
 

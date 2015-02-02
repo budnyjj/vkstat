@@ -3,5 +3,7 @@
 *\#
 .\#*
 
-*/__pycache__
+*__pycache__
+
+_graph
 _data

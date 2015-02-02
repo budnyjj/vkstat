@@ -8,7 +8,8 @@ import math
 try:
     import networkx as nx
 except ImportError:
-    print("NetworkX is required to run this script.")
+    print("This script requires NetworkX to be installed.")
+    exit(1)
 
 import graph.io as io
 import graph.printing as gprint
@@ -27,22 +28,24 @@ def assign_labels(graph):
     return labels
 
 def assign_node_colors(graph):
-    '''assign colors to nodes by total number of friends'''
-    color_list = []
+    '''assign colors to nodes by number of friends contained in graph'''
+    colors = []
+    for node in graph.nodes_iter():
+        node_color = math.log(1 + graph.degree(node))
+        colors.append(node_color)
+    return colors
+    
+def assign_node_sizes(graph, default_size = 100, default_scale = 25):
+    '''assign node sizes by total number of friends in whole network'''
+    sizes = []
     for node in graph.nodes_iter(data=True):
         try:
-            friends_total = float(node[1]['friends_total'])
-            node_color = math.log(friends_total)
-            color_list.append(node_color)
+            node_size = node[1]['friends_total'] / default_scale
+            node_size += 1
+            node_size *= default_size
+            sizes.append(node_size)
         except (KeyError, ValueError):
-            color_list.append(1)
-    return color_list
-    
-def assign_node_sizes(graph, default_size = 100):
-    '''assign node sizes by number of friends contained in graph'''
-    sizes = []
-    for node in graph.nodes_iter():
-        sizes.append((1 + graph.degree(node)) * default_size)
+            sizes.append(1)
     return sizes
 
 def assign_edge_colors(graph):
