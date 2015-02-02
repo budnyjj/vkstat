@@ -4,10 +4,11 @@
 ** INTERESTING
   + Взвесить ребра через число лайков постов на страницах
   + Посчитать average clustering coefficient: http://en.wikipedia.org/wiki/Clustering_coefficient
+  + Label Propagation Method (LPM) [8] or the Infomap algorithm -- для разделения на подгруппы.
 
 ** BUGS
   + Сделать UIDs стандартным аргументом для функций получения данных.
   + Оптимизировать процесс адресации при добавлении total_followers к нодам.
   + Разослать желающим списки числа друзей/активистов для нормировки
   + Добавить matplotlib, networkx, PyYAML, cairo, gobject в зависимости.
-  
+  + Сделать info.py полностью табличным -- вывод свойдной таблицы с возможностью сортировки.

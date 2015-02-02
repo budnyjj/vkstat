@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import networkx as nx
 import time
+
+try:
+    import networkx as nx
+except ImportError:
+    print("NetworkX is required to run this script.")
 
 import graph.io as io
 import graph.printing as gprint
@@ -120,7 +124,7 @@ def print_pagerank(graph):
         node_name = "{} {} ({})".format(graph.node[uid]['first_name'],
                                         graph.node[uid]['last_name'],
                                         uid)
-        print("{:<40}{:<15}".format(node_name, pagerank))
+        print("{:<40}{:<10.4f}".format(node_name, pagerank))
 
     print()
     
@@ -172,6 +176,7 @@ try:
     if args.periphery:
         print_periphery_nodes(nx.periphery(G), nodes_data)
 
+    # table values
     if args.degrees:
         print_degrees(G)
 

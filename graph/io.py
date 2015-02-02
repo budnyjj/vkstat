@@ -2,8 +2,12 @@
 # reading and writing graph data  
 
 import pickle
-import networkx as nx
 
+try:
+    import networkx as nx
+except ImportError:
+    print("NetworkX is required to run this script.")
+    
 def read_graph(filename):
     ''' Read graph from file, raise IOError if cannot do it '''
     graph = None

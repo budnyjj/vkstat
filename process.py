@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import networkx as nx
 import time
+
+try:
+    import networkx as nx
+except ImportError:
+    print("NetworkX is required to run this script.")
 
 import graph.io as io
 import graph.printing as gprint

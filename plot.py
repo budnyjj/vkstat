@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import networkx as nx
 import time
 import math
+
+try:
+    import networkx as nx
+except ImportError:
+    print("NetworkX is required to run this script.")
 
 import graph.io as io
 import graph.printing as gprint
@@ -66,17 +70,20 @@ parser.add_argument('--dpi', type=int, help='set dpi')
 
 args = parser.parse_args()
 
-# configure pyplot before import
-if args.with_latex:
-    from matplotlib import rc
-    rc('font',**{'family':'sans-serif','sans-serif':['Monospace']})
-    rc('text', usetex=True)
-    rc('text.latex', unicode=True)
-    rc('text.latex', preamble = '\\usepackage[utf8]{inputenc}')
-    rc('text.latex', preamble = '\\usepackage[russian]{babel}')
+try:
+    # configure pyplot before import
+    if args.with_latex:
+        from matplotlib import rc
+        rc('font',**{'family':'sans-serif','sans-serif':['Monospace']})
+        rc('text', usetex=True)
+        rc('text.latex', unicode=True)
+        rc('text.latex', preamble = '\\usepackage[utf8]{inputenc}')
+        rc('text.latex', preamble = '\\usepackage[russian]{babel}')
 
-import matplotlib.pyplot as plt
-plt.switch_backend('GTK3Cairo')
+    import matplotlib.pyplot as plt
+    plt.switch_backend('GTK3Cairo')
+except ImportError:
+    print("Matplotlib, gobject and cairo are required to run this script.")
 
 try:
     start_time = time.time()

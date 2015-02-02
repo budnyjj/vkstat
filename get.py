@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import vkontakte
-import networkx as nx
 import time
 import copy
 import functools
@@ -11,6 +9,17 @@ import random
 from multiprocessing import Pool
 import cProfile, pstats
 
+try:
+    import networkx as nx
+except ImportError:
+    print("NetworkX is required to run this script.")
+
+try:
+    import vkontakte
+except ImportError:
+    print("Vkontakte is required to run this script.")
+    print("Download and install it from https://github.com/budnyjj/vkontakte3")
+    
 import graph.io as io
 import graph.printing as gprint
 
