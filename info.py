@@ -192,46 +192,51 @@ try:
         for i, field in enumerate(args_fields):
             args_fields[i] = field.lower().strip()
 
+        fields = [
+            {
+                "header" : "degree",
+                "function" : append_degree,
+                "align" : "r"
+            },
+            {
+                "header" : "friends",
+                "function" : append_num_friends,
+                "align" : "r"
+            },
+            {
+                "header" : "followers",
+                "function" : append_num_followers,
+                "align" : "r"
+            },
+            {
+                "header" : "pagerank",
+                "function" : append_pagerank,
+                "align" : "r"
+            },
+            {
+                "header" : "central",
+                "function" : append_central_nodes,
+                "align" : "c"
+            },
+            {
+                "header" : "periphery",
+                "function" : append_periphery_nodes,
+                "align" : "c"
+            },
+        ]
+        
         table_headers = [ "Username" ]
         table_align = {"Username": "l"}
         table_data = {}
 
-        if "degree" in args_fields:
-            col_header = "Degree"
-            table_headers.append(col_header)
-            append_degree(G, table_data)
-            table_align[col_header] = "r"
-    
-        if "friends" in args_fields:
-            col_header = "Friends"
-            table_headers.append(col_header)
-            append_num_friends(G, table_data)
-            table_align[col_header] = "r"
-    
-        if "followers" in args_fields:
-            col_header = "Followers"
-            table_headers.append(col_header)
-            append_num_followers(G, table_data)
-            table_align[col_header] = "r"
-    
-        if "pagerank" in args_fields:
-            col_header = "Pagerank"
-            table_headers.append(col_header)
-            append_pagerank(G, table_data)
-            table_align[col_header] = "r"
-            
-        if "central" in args_fields:
-            col_header = "Central"
-            table_headers.append(col_header)
-            append_central_nodes(G, table_data)
-            table_align[col_header] = "c"
-    
-        if "periphery" in args_fields:
-            col_header = "Periphery"
-            table_headers.append(col_header)
-            append_periphery_nodes(G, table_data)
-            table_align[col_header] = "c"
-    
+        for field in fields:
+            if field["header"] in args_fields:
+                col_header = field["header"].capitalize()
+                table_headers.append(col_header)
+                col_function = field["function"]
+                col_function(G, table_data)
+                table_align[col_header] = field["align"]
+        
         table = PrettyTable(table_headers)
         add_rows(table_data, table)
     
