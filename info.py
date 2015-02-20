@@ -216,7 +216,7 @@ try:
         try:
             from prettytable import PrettyTable
         except ImportError:
-            print("This script requires prettytable library to be installed.")
+            print("This script requires PrettyTable library to be installed.")
             exit(1)
 
         args_fields = args.fields.split(",")
