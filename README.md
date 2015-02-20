@@ -9,13 +9,13 @@ process, analyze and plot them.
 
 Here is the example of social graph built by these scripts (without data about individuals):
 ![Example of social graph]
-(https://github.com/budnyjj/vkstat/blob/master/examples/one.png)
+(https://github.com/budnyjj/vkstat/blob/master/examples/first.png)
 
 In this graph, **node size** shows **total number friends in network** (not only common) --
-the more common friends node has, the larger it is.
+the more common friends user has, the larger it is.
 
 The **node color** depends on **number of common friends** (which is equal to node degree) -- 
-the more friends node has, the darker it is. Nodes, which coloured in yellow, 
+the more friends user has, the darker it is. Nodes, which colored in yellow, 
 have unknown total number of friends. 
 
 The **edge color** depends on **position of the node** in graph: edges from central nodes are coloured in
@@ -45,7 +45,7 @@ get.py --> process.py ---> plot.py
 
   Built graph can be stored in **Pickle** or **YAML** format (switch between them by output file extension).
 
-* [process.py](https://github.com/budnyjj/vkstat/blob/master/process.py) -- use it to cut 
+* [process.py](https://github.com/budnyjj/vkstat/blob/master/process.py) -- use it to cut off 
   nodes, which have small number of common neighbors in graph. It can be useful to **reduce graph size** 
   and/or **convert graph files between YAML and pickle formats**.
 
