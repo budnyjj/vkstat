@@ -45,17 +45,26 @@ def avg_num_friends(graph):
         if 'friends_total' in node[1]:
             num_friends += node[1]['friends_total']
             num_nodes += 1
-
-    return num_friends / num_nodes
+    
+    if num_nodes == 0:
+        return 0
+    else:
+        return num_friends / num_nodes
 
 
 def avg_num_followers(graph):
-    '''Average number of friends in graph'''
-    pass
-    # num_nodes = 0
-    # num_friends = 0
-    # for node in graph.nodes(data=True):
-    #     print(node)
+    '''Average number of followers in graph'''
+    num_nodes = 0
+    num_followers = 0
+    for node in graph.nodes(data=True):
+        if 'followers_total' in node[1]:
+            num_followers += node[1]['followers_total']
+            num_nodes += 1
+    
+    if num_nodes == 0:
+        return 0
+    else:
+        return num_followers / num_nodes
         
 
 def append_central_nodes(graph, table_data):
@@ -240,7 +249,7 @@ parser.add_argument("-d", "--diameter", help="print graph diameter",
 
 parser.add_argument("--avg-friends", help="print average number of friends",
                     action="store_true")
-parser.add_argument("--avg-followers", help="print average number of friends",
+parser.add_argument("--avg-followers", help="print average number of followers",
                     action="store_true")
 
 impl_headers = ",".join([field["header"] for field in impl_fields])
@@ -272,7 +281,7 @@ try:
         print("Average number of friends: {0}\n".format(avg_num_friends(G)))
 
     if args.avg_followers:
-        print("Average number of followers: {0}\n".format(avg_num_followers))
+        print("Average number of followers: {0}\n".format(avg_num_followers(G)))
         
     if args.fields:
         try:
