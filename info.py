@@ -176,8 +176,12 @@ def append_pagerank(graph, table_data):
 def append_media_activist(graph, table_data):
     '''Append information about "media-activism". '''
 
-    high_threshold_friends = avg_num_friends(graph) * 3
-    low_threshold_followers = avg_num_followers(graph) / 3
+    avg_friends = avg_num_friends(graph)
+    high_threshold_friends = avg_friends * 3
+    low_threshold_followers = high_threshold_friends / 3
+
+    print("High friends:", high_threshold_friends) 
+    print("Low followers:", low_threshold_followers)
     
     # first, setup all values to false
     for node in graph.nodes(data=True):
