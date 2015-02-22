@@ -164,6 +164,28 @@ def append_pagerank(graph, table_data):
         else:
             table_data[node_name] = [ pagerank ]
 
+def append_media_activist(graph, table_data):
+    '''Append information about "media-activism". '''
+
+    high_threshold_friends = avg_num_friends(graph) * 3
+    low_threshold_followers = avg_num_followers(graph) / 3
+    
+    # first, setup all values to false
+    for node in graph.nodes(data=True):
+        node_name = gen_username(node[1]['first_name'],
+                                 node[1]['last_name'],
+                                 node[0])
+        is_activist = ""
+        if (('friends_total' in node[1]) and ('friends_total' in node[1])):
+            if ((node[1]['friends_total'] > high_threshold_friends) and
+                (node[1]['followers_total'] < low_threshold_followers)):
+                is_activist = "True"
+
+        if node_name in table_data:
+            table_data[node_name].append(is_activist)
+        else:
+            table_data[node_name] = [ is_activist ]
+    
 # list of implemented fields
 impl_fields = [
     {
@@ -194,6 +216,11 @@ impl_fields = [
     {
         "header" : "periphery",
         "function" : append_periphery_nodes,
+        "align" : "c"
+    },
+    {
+        "header" : "media-activist",
+        "function" : append_media_activist,
         "align" : "c"
     },
 ]
