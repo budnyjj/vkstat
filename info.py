@@ -30,7 +30,11 @@ def top_table(table_str, num_newlines):
     cur_index = 0
     for _ in range(num_newlines + 3):
         cur_index = table_str.find("\n", cur_index+1)
-    
+
+        # end of table
+        if cur_index == -1:
+            return table_str
+        
     return table_str[:cur_index+1] + first_line
 
 

@@ -24,10 +24,15 @@ except ImportError:
 import graph.io as io
 import utils.print as gprint
 
+INIT_TIME_TO_SLEEP_MIN=0.2
+INIT_TIME_TO_SLEEP_MAX=2
+TIME_TO_SLEEP_MAX=5
+TIME_TO_SLEEP_FACTOR=2
+
 def write_time_profiling_data(profiler, filename):
     '''Write time profiling data to file.'''
     ps = pstats.Stats(profiler)
-    print("Write time profiling information " \
+    print("Write time profiling information "\
           "to: {0}.\n".format(filename))
     ps.dump_stats(filename)
 
@@ -48,10 +53,9 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
     answer = None
     error_count = 0
 
-    # max value of sleep time
-    max_time_to_sleep = 10
     # used to delay request with errors
-    time_to_sleep = random.uniform(1, 2)
+    time_to_sleep = random.uniform(INIT_TIME_TO_SLEEP_MIN,
+                                   INIT_TIME_TO_SLEEP_MAX)
 
     while True:
         try:
@@ -64,13 +68,14 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Now try again (#{})...'.format(error_count))
+                    print('Lets try again in {0}s '\
+                          '(#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
 
-                    if time_to_sleep <= max_time_to_sleep:
+                    if time_to_sleep <= TIME_TO_SLEEP_MAX:
                         # exponentially increase time_to_sleep
-                        time_to_sleep *= 2
+                        time_to_sleep *= TIME_TO_SLEEP_FACTOR
                 else:
                     print('Reached maximal bandwith error count ({0})! '\
                           'Skip...'.format(error_count))
@@ -94,8 +99,10 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
     '''Get list with friend profiles of user with specified profile'''
     answer = None
     error_count = 0
+
     # used to delay request with errors
-    time_to_sleep = random.uniform(0.1, 0.2)
+    time_to_sleep = random.uniform(INIT_TIME_TO_SLEEP_MIN,
+                                   INIT_TIME_TO_SLEEP_MAX)
 
     while True:
         try:
@@ -109,11 +116,15 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Try again (#{0})...'.format(error_count))
+                    print('Lets try again in '\
+                          '{0}s (#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
-                    # exponentially increase time_to_sleep
-                    time_to_sleep *= 2
+
+                    if time_to_sleep <= TIME_TO_SLEEP_MAX:
+                        # exponentially increase time_to_sleep
+                        time_to_sleep *= TIME_TO_SLEEP_FACTOR
+                        
                 else:
                     print('   Reached maximal bandwith error count ({0})! '\
                           'Skip...'.format(error_count))
@@ -140,8 +151,10 @@ def get_num_followers(uid, max_err_count = 5):
     Return -1 if cannot do so. '''
     answer = None
     error_count = 0
+
     # used to delay request with errors
-    time_to_sleep = random.uniform(0.1, 0.2)
+    time_to_sleep = random.uniform(INIT_TIME_TO_SLEEP_MIN,
+                                   INIT_TIME_TO_SLEEP_MAX)
 
     while True:
         try:
@@ -153,11 +166,14 @@ def get_num_followers(uid, max_err_count = 5):
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Now try again (#{})...'.format(error_count))
+                    print('Lets try again in '\
+                          '{0}s (#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
-                    # exponentially increase time_to_sleep
-                    time_to_sleep *= 2
+
+                    if time_to_sleep <= TIME_TO_SLEEP_MAX:
+                        # exponentially increase time_to_sleep
+                        time_to_sleep *= TIME_TO_SLEEP_FACTOR
                 else:
                     print('Reached maximal bandwith error count ({0})! '\
                           'Skip...'.format(error_count))
