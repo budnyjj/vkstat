@@ -189,7 +189,7 @@ def append_media_activist(graph, table_data):
                                  node[1]['last_name'],
                                  node[0])
         is_activist = ""
-        if (('friends_total' in node[1]) and ('friends_total' in node[1])):
+        if (('friends_total' in node[1]) and ('followers_total' in node[1])):
             if ((node[1]['friends_total'] > high_threshold_friends) and
                 (node[1]['followers_total'] < low_threshold_followers)):
                 is_activist = "True"
