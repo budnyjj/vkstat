@@ -11,7 +11,7 @@ except ImportError:
     exit(1)
 
 import graph.io as io
-import graph.printing as gprint
+import utils.print as gprint
 
 DESCRIPTION = 'Load NX graph from SOURCE, ' \
               'process, and save it to DESTINATION.'
