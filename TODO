@@ -13,4 +13,5 @@
   + Добавить matplotlib, networkx, PyYAML, cairo, gobject в зависимости.
 
 * NOW
-  + Add custom logic to info.py -- mediaactivist detection.  
+  + Add custom logic to info.py -- mediaactivist detection.
+  + Добавить зависимость от setuptools  

@@ -37,6 +37,26 @@ def top_table(table_str, num_newlines):
         
     return table_str[:cur_index+1] + first_line
 
+def avg_num_friends(graph):
+    '''Average number of friends in graph'''
+    num_nodes = 0
+    num_friends = 0
+    for node in graph.nodes(data=True):
+        if 'friends_total' in node[1]:
+            num_friends += node[1]['friends_total']
+            num_nodes += 1
+
+    return num_friends / num_nodes
+
+
+def avg_num_followers(graph):
+    '''Average number of friends in graph'''
+    pass
+    # num_nodes = 0
+    # num_friends = 0
+    # for node in graph.nodes(data=True):
+    #     print(node)
+        
 
 def append_central_nodes(graph, table_data):
     '''Append periphery nodes to table_data'''
@@ -191,6 +211,11 @@ parser.add_argument("-r", "--radius", help="print graph radius",
 parser.add_argument("-d", "--diameter", help="print graph diameter",
                     action="store_true")
 
+parser.add_argument("--avg-friends", help="print average number of friends",
+                    action="store_true")
+parser.add_argument("--avg-followers", help="print average number of friends",
+                    action="store_true")
+
 impl_headers = ",".join([field["header"] for field in impl_fields])
 parser.add_argument("-f", "--fields", metavar='FIELDS', type=str,
                     help="print specified fields of each node:\n"\
@@ -216,6 +241,12 @@ try:
     if args.diameter:
         print("Graph diameter: {0}\n".format(nx.diameter(G)))
 
+    if args.avg_friends:
+        print("Average number of friends: {0}\n".format(avg_num_friends(G)))
+
+    if args.avg_followers:
+        print("Average number of followers: {0}\n".format(avg_num_followers))
+        
     if args.fields:
         try:
             from prettytable import PrettyTable
