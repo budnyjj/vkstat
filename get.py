@@ -47,8 +47,11 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
     '''Get information (profile) about user with specified uid.'''
     answer = None
     error_count = 0
+
+    # max value of sleep time
+    max_time_to_sleep = 10
     # used to delay request with errors
-    time_to_sleep = random.uniform(0.1, 0.2)
+    time_to_sleep = random.uniform(1, 2)
 
     while True:
         try:
@@ -64,8 +67,10 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
                     print('Now try again (#{})...'.format(error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
-                    # exponentially increase time_to_sleep
-                    time_to_sleep *= 2
+
+                    if time_to_sleep <= max_time_to_sleep:
+                        # exponentially increase time_to_sleep
+                        time_to_sleep *= 2
                 else:
                     print('Reached maximal bandwith error count ({0})! '\
                           'Skip...'.format(error_count))

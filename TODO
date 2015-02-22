@@ -11,4 +11,6 @@
   + Оптимизировать процесс адресации при добавлении total_followers к нодам.
   + Разослать желающим списки числа друзей/активистов для нормировки
   + Добавить matplotlib, networkx, PyYAML, cairo, gobject в зависимости.
-  + Сделать info.py полностью табличным -- вывод свойдной таблицы с возможностью сортировки.
+
+* NOW
+  + Add custom logic to info.py -- mediaactivist detection.  
