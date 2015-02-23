@@ -177,11 +177,14 @@ def append_media_activist(graph, table_data):
     '''Append information about "media-activism". '''
 
     avg_friends = avg_num_friends(graph)
-    high_threshold_friends = avg_friends * 3
-    low_threshold_followers = high_threshold_friends / 3
+    hard_limit_friends = avg_friends * 5
+    soft_limit_friends = avg_friends * 3
+    soft_limit_followers = soft_limit_friends / 3
 
-    print("High friends:", high_threshold_friends) 
-    print("Low followers:", low_threshold_followers)
+    print("Hard number of friends limit:  ", hard_limit_friends) 
+    print("Soft number of friends limit:  ", soft_limit_friends)
+    print("Soft number of followers limit:", soft_limit_followers)
+    
     
     # first, setup all values to false
     for node in graph.nodes(data=True):
@@ -190,8 +193,10 @@ def append_media_activist(graph, table_data):
                                  node[0])
         is_activist = ""
         if (('friends_total' in node[1]) and ('followers_total' in node[1])):
-            if ((node[1]['friends_total'] > high_threshold_friends) and
-                (node[1]['followers_total'] < low_threshold_followers)):
+            if (node[1]['friends_total'] > hard_limit_friends):
+                is_activist = "True"
+            elif ((node[1]['friends_total'] > soft_limit_friends) and
+               (node[1]['followers_total'] < soft_limit_followers)):
                 is_activist = "True"
 
         if node_name in table_data:
