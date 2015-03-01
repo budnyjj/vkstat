@@ -12,6 +12,9 @@ except ImportError:
     exit(1)
     
 import graph.io as io
+import graph.stats as stats
+import graph.predicates as predicates
+
 import utils.print as gprint
 
 
@@ -23,10 +26,10 @@ def add_rows(table_data, table):
         table_data[username].insert(0, username)
         table.add_row(table_data[username])
 
-def top_table(table_str, num_newlines):
+def top_of_table(table_str, num_newlines):
     first_index = table_str.find("\n")
     first_line  = table_str[:first_index+1]
-    
+
     cur_index = 0
     for _ in range(num_newlines + 3):
         cur_index = table_str.find("\n", cur_index+1)
@@ -34,38 +37,9 @@ def top_table(table_str, num_newlines):
         # end of table
         if cur_index == -1:
             return table_str
-        
+
     return table_str[:cur_index+1] + first_line
 
-def avg_num_friends(graph):
-    '''Average number of friends in graph'''
-    num_nodes = 0
-    num_friends = 0
-    for node in graph.nodes(data=True):
-        if 'friends_total' in node[1]:
-            num_friends += node[1]['friends_total']
-            num_nodes += 1
-    
-    if num_nodes == 0:
-        return 0
-    else:
-        return num_friends / num_nodes
-
-
-def avg_num_followers(graph):
-    '''Average number of followers in graph'''
-    num_nodes = 0
-    num_followers = 0
-    for node in graph.nodes(data=True):
-        if 'followers_total' in node[1]:
-            num_followers += node[1]['followers_total']
-            num_nodes += 1
-    
-    if num_nodes == 0:
-        return 0
-    else:
-        return num_followers / num_nodes
-        
 
 def append_central_nodes(graph, table_data):
     '''Append periphery nodes to table_data'''
@@ -78,9 +52,9 @@ def append_central_nodes(graph, table_data):
         if node_name in table_data:
             table_data[node_name].append("")
         else:
-            table_data[node_name] = [ "" ]
+            table_data[node_name] = [""]
 
-    # second, update these values to True for periphery 
+    # second, update these values to True for periphery
     for uid in nx.center(graph):
         node_name = gen_username(graph.node[uid]['first_name'],
                                  graph.node[uid]['last_name'],
@@ -99,9 +73,9 @@ def append_periphery_nodes(graph, table_data):
         if node_name in table_data:
             table_data[node_name].append("")
         else:
-            table_data[node_name] = [ "" ]
+            table_data[node_name] = [""]
 
-    # second, update these values to True for periphery 
+    # second, update these values to True for periphery
     for uid in nx.periphery(graph):
         node_name = gen_username(graph.node[uid]['first_name'],
                                  graph.node[uid]['last_name'],
@@ -120,7 +94,7 @@ def append_degree(graph, table_data):
         if node_name in table_data:
             table_data[node_name].append(node_degree)
         else:
-            table_data[node_name] = [ node_degree ]
+            table_data[node_name] = [node_degree]
 
         
 def append_num_friends(graph, table_data):
@@ -141,7 +115,7 @@ def append_num_friends(graph, table_data):
         if node_name in table_data:
             table_data[node_name].append(num_friends)
         else:
-            table_data[node_name] = [ num_friends ]
+            table_data[node_name] = [num_friends]
 
 def append_num_followers(graph, table_data):
     '''Append number of friends (and followers, if exists) of each node to table_data'''
@@ -171,39 +145,26 @@ def append_pagerank(graph, table_data):
         if node_name in table_data:
             table_data[node_name].append(pagerank)
         else:
-            table_data[node_name] = [ pagerank ]
+            table_data[node_name] = [pagerank]
 
 def append_media_activist(graph, table_data):
-    '''Append information about "media-activism". '''
+    '''Append information about "media-activism".'''
+    avg_friends = stats.avg_num_friends(graph)
 
-    avg_friends = avg_num_friends(graph)
-    hard_limit_friends = avg_friends * 5
-    soft_limit_friends = avg_friends * 3
-    soft_limit_followers = soft_limit_friends / 3
-
-    print("Hard number of friends limit:  ", hard_limit_friends) 
-    print("Soft number of friends limit:  ", soft_limit_friends)
-    print("Soft number of followers limit:", soft_limit_followers)
-    
-    
     # first, setup all values to false
     for node in graph.nodes(data=True):
         node_name = gen_username(node[1]['first_name'],
                                  node[1]['last_name'],
                                  node[0])
         is_activist = ""
-        if (('friends_total' in node[1]) and ('followers_total' in node[1])):
-            if (node[1]['friends_total'] > hard_limit_friends):
-                is_activist = "True"
-            elif ((node[1]['friends_total'] > soft_limit_friends) and
-               (node[1]['followers_total'] < soft_limit_followers)):
-                is_activist = "True"
+        if predicates.is_media_activist(node, avg_friends):
+            is_activist = "True"
 
         if node_name in table_data:
             table_data[node_name].append(is_activist)
         else:
-            table_data[node_name] = [ is_activist ]
-    
+            table_data[node_name] = [is_activist]
+
 # list of implemented fields
 impl_fields = [
     {
@@ -281,16 +242,16 @@ try:
         print(nx.info(G), "\n")
 
     if args.radius:
-        print("Graph radius: {0}\n".format(nx.radius(G)))
+        print("Graph radius: ", nx.radius(G))
 
     if args.diameter:
-        print("Graph diameter: {0}\n".format(nx.diameter(G)))
+        print("Graph diameter: ", nx.diameter(G))
 
     if args.avg_friends:
-        print("Average number of friends: {0}\n".format(avg_num_friends(G)))
+        print("Average number of friends: ", stats.avg_num_friends(G))
 
     if args.avg_followers:
-        print("Average number of followers: {0}\n".format(avg_num_followers(G)))
+        print("Average number of followers: ", stats.avg_num_followers(G))
         
     if args.fields:
         try:
@@ -337,7 +298,7 @@ try:
 
         table_str = str(table)
         if args.top:
-            table_str = top_table(table_str, args.top)
+            table_str = top_of_table(table_str, args.top)
             
         print(table_str)
 

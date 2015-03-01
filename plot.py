@@ -49,15 +49,21 @@ def assign_node_sizes(graph, default_size = 100, default_scale = 25):
     return sizes
 
 def assign_edge_colors(graph):
-    '''highlight edges from central nodes'''
+    '''Highlight edges from central nodes'''
     color_list = []
-    central_nodes = set(nx.center(G))
-    for edge in G.edges_iter():
-        if ((edge[0] in central_nodes) or
-            (edge[1] in central_nodes)):
-            color_list.append('r')
-        else:
+    try:
+        central_nodes = set(nx.center(G))
+    except nx.exception.NetworkXError:
+        for edge in G.edges_iter():
             color_list.append('y')
+    else:
+        for edge in G.edges_iter():
+            if ((edge[0] in central_nodes) or
+                (edge[1] in central_nodes)):
+                color_list.append('r')
+            else:
+                color_list.append('y')
+
     return color_list
 
 parser = argparse.ArgumentParser(description=DESCRIPTION)
