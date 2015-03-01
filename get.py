@@ -6,50 +6,58 @@ import time
 import functools
 import random
 from multiprocessing import Pool
-import cProfile, pstats
+import cProfile
+import pstats
 
 try:
     import networkx as nx
 except ImportError:
-    print("This script requires NetworkX to be installed.")
+    print('This script requires NetworkX to be installed.')
     exit(1)
 
 try:
     import vkontakte
 except ImportError:
-    print("This script requires vkontakte package to be installed.")
-    print("Download and install it from https://github.com/budnyjj/vkontakte3")  
+    print('This script requires vkontakte package to be installed.')
+    print('Download and install it from https://github.com/budnyjj/vkontakte3')
     exit(1)
 
 import graph.io as io
 import utils.print as gprint
 
-INIT_TIME_TO_SLEEP_MIN=0.2
-INIT_TIME_TO_SLEEP_MAX=2
-TIME_TO_SLEEP_MAX=5
-TIME_TO_SLEEP_FACTOR=2
+INIT_TIME_TO_SLEEP_MIN = 0.2
+INIT_TIME_TO_SLEEP_MAX = 2
+TIME_TO_SLEEP_MAX = 5
+TIME_TO_SLEEP_FACTOR = 2
+
 
 def write_time_profiling_data(profiler, filename):
-    '''Write time profiling data to file.'''
+    """Write time profiling data to file."""
     ps = pstats.Stats(profiler)
-    print("Write time profiling information "\
-          "to: {0}.\n".format(filename))
+    print('Write time profiling information '
+          'to: {0}.\n'.format(filename))
     ps.dump_stats(filename)
 
+
 def args_are_valid(args):
-    '''Validate cli arguments. Raise ValueError if they are not correct.'''
+    """Validate cli arguments.
+
+    Raise ValueError if they are not correct.
+
+    """
     if args.recursion_level <= 0:
-        print("Recursion level should be greater than zero!\n")
+        print('Recursion level should be greater than zero!\n')
         raise ValueError
     elif args.pool_size <= 0:
-        print("Pool size should be greater than zero!\n")
+        print('Pool size should be greater than zero!\n')
         raise ValueError
     else:
-        print("Provided arguments are seem to be correct...\n")
- 
-def get_profile(uid, req_fields = 'first_name, last_name, sex',
-                max_err_count = 5):
-    '''Get information (profile) about user with specified uid.'''
+        print('Provided arguments are seem to be correct...\n')
+
+
+def get_profile(uid, req_fields='first_name, last_name, sex',
+                max_err_count=5):
+    """Get information (profile) about user with specified uid."""
     answer = None
     error_count = 0
 
@@ -59,16 +67,16 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
 
     while True:
         try:
-            # get only first element of list 
-            answer = VK.getProfiles(uids = uid,
-                                    fields = req_fields)[0]
+            # get only first element of list
+            answer = VK.getProfiles(uids=uid,
+                                    fields=req_fields)[0]
         except vkontakte.VKError as e:
             print('E: profile {}:'.format(uid))
             if e.code == 6:
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Lets try again in {0}s '\
+                    print('Lets try again in {0}s '
                           '(#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
@@ -77,7 +85,7 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
                         # exponentially increase time_to_sleep
                         time_to_sleep *= TIME_TO_SLEEP_FACTOR
                 else:
-                    print('Reached maximal bandwith error count ({0})! '\
+                    print('Reached maximal bandwith error count ({0})! '
                           'Skip...'.format(error_count))
                     return []
             else:
@@ -90,13 +98,14 @@ def get_profile(uid, req_fields = 'first_name, last_name, sex',
             return []
 
         else:
-            print('S: profile {uid}: ' \
+            print('S: profile {uid}: '
                   '{first_name} {last_name}.'.format(**answer))
             return answer
 
-def get_friends(profile, req_fields = 'first_name, last_name, sex', 
-                max_err_count = 5):
-    '''Get list with friend profiles of user with specified profile'''
+
+def get_friends(profile, req_fields='first_name, last_name, sex',
+                max_err_count=5):
+    """Get list with friend profiles of user with specified profile."""
     answer = None
     error_count = 0
 
@@ -106,17 +115,17 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
 
     while True:
         try:
-            # get only first element of list 
-            answer = VK.friends.get(uid = profile['uid'],
-                                    fields = req_fields)
+            # get only first element of list
+            answer = VK.friends.get(uid=profile['uid'],
+                                    fields=req_fields)
         except vkontakte.VKError as e:
-            print('E: friends of {uid} '\
+            print('E: friends of {uid} '
                   '({first_name} {last_name}):'.format(**profile))
-            if e.code == 6: # bandwith limitations
+            if e.code == 6:  # bandwith limitations
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Lets try again in '\
+                    print('Lets try again in '
                           '{0}s (#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
@@ -124,9 +133,9 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
                     if time_to_sleep <= TIME_TO_SLEEP_MAX:
                         # exponentially increase time_to_sleep
                         time_to_sleep *= TIME_TO_SLEEP_FACTOR
-                        
+
                 else:
-                    print('   Reached maximal bandwith error count ({0})! '\
+                    print('   Reached maximal bandwith error count ({0})! '
                           'Skip...'.format(error_count))
                     return []
 
@@ -134,21 +143,25 @@ def get_friends(profile, req_fields = 'first_name, last_name, sex',
                 print('   {}.'.format(e.description))
                 return []
 
-        except Exception as e: # unknown error occured 
-            print('E: friends of {uid} '\
+        except Exception as e:  # unknown error occured
+            print('E: friends of {uid} '
                   '({first_name} {last_name}):'.format(**profile))
             print('   {}.'.format(e))
             return []
 
-        else: # got friends without errors
-            print('S: {number} friends of {uid}: ' \
+        else:  # got friends without errors
+            print('S: {number} friends of {uid}: '
                   '({first_name} {last_name}).'.format(
-                      number = len(answer), **profile))
+                      number=len(answer), **profile))
             return answer
 
-def get_num_followers(uid, max_err_count = 5):
-    '''Get number of followers of user with specified UID.
-    Return -1 if cannot do so. '''
+
+def get_num_followers(uid, max_err_count=5):
+    """Get number of followers of user with specified UID.
+
+    Return -1 if cannot do so.
+
+    """
     answer = None
     error_count = 0
 
@@ -158,15 +171,15 @@ def get_num_followers(uid, max_err_count = 5):
 
     while True:
         try:
-            answer = VK.subscriptions.getFollowers(uid = uid,
-                                                   count = 0)['count']
+            answer = VK.subscriptions.getFollowers(uid=uid,
+                                                   count=0)['count']
         except vkontakte.VKError as e:
             print('E: followers of {}:'.format(uid))
             if e.code == 6:
                 error_count += 1
                 print('   Vk.com bandwith limitations. ', end='')
                 if error_count <= max_err_count:
-                    print('Lets try again in '\
+                    print('Lets try again in '
                           '{0}s (#{1})...'.format(time_to_sleep, error_count))
                     # Need to sleep due to vk.com bandwidth limitations
                     time.sleep(time_to_sleep)
@@ -175,7 +188,7 @@ def get_num_followers(uid, max_err_count = 5):
                         # exponentially increase time_to_sleep
                         time_to_sleep *= TIME_TO_SLEEP_FACTOR
                 else:
-                    print('Reached maximal bandwith error count ({0})! '\
+                    print('Reached maximal bandwith error count ({0})! '
                           'Skip...'.format(error_count))
                     return -1
             else:
@@ -190,36 +203,40 @@ def get_num_followers(uid, max_err_count = 5):
             print('S: user {} has {} followers.'.format(uid, answer))
             return answer
 
+
 def strip_attributes(node, preserve_attrs):
-    '''Strip unnecessary data attributes from node'''
+    """Strip unnecessary data attributes from node."""
     node_attrs = list(node[1].keys())
     for attr in node_attrs:
         if attr not in preserve_attrs:
             del node[1][attr]
     return node
 
+
 def profile_to_node(src_profile):
-    '''convert source profile to graph node'''
+    """convert source profile to graph node."""
     return (src_profile['uid'], src_profile)
 
+
 def build_edges(src_profile, dst_profiles):
-    '''create set of edges, compatible with NX graph format'''
+    """create set of edges, compatible with NX graph format."""
     edges = set()
     for dst_profile in dst_profiles:
-        edges.add( (src_profile['uid'], dst_profile['uid']) )
+        edges.add((src_profile['uid'], dst_profile['uid']))
     return edges
 
-def construct_graph(uids, required_attributes = ('first_name',
-                                                 'last_name',
-                                                 'sex'),
-                    with_num_followers = False,
-                    max_recursion_level = 1, pool_size = 1,
-                    time_profiler = None):
-    '''get and build graph data for specified uids'''
+
+def construct_graph(uids, required_attributes=('first_name',
+                                               'last_name',
+                                               'sex'),
+                    with_num_followers=False,
+                    max_recursion_level=1, pool_size=1,
+                    time_profiler=None):
+    """get and build graph data for specified uids."""
 
     # get list of profiles using get_profile() in multiple processes
     def _get_init_profiles(uids, attrs_string):
-        print("Get init profiles...\n")
+        print('Get init profiles...\n')
 
         # get_profile() with required data attributes
         req_get_profile = functools.partial(get_profile,
@@ -268,8 +285,8 @@ def construct_graph(uids, required_attributes = ('first_name',
             if time_profiler:
                 time_profiler.enable()
 
-        print("\nThere are {0} obtained friend profiles on current level " \
-              "of recursion.\n".format(sum(map(len, friend_profiles))))
+        print('\nThere are {0} obtained friend profiles on current level '
+              'of recursion.\n'.format(sum(map(len, friend_profiles))))
 
         return friend_profiles
 
@@ -279,15 +296,17 @@ def construct_graph(uids, required_attributes = ('first_name',
         # full list of user uids
         all_uids = [node[0] for node in nodes]
 
-        # uids of users with 'friends_total' 
-        uids_with_friends_total = [node[0] for node in nodes if 'friends_total' in node[1]]
+        # uids of users with 'friends_total'
+        uids_with_friends_total = [node[0]
+                                   for node in nodes if 'friends_total' in node[1]]
 
         # list of user uids, contains only nodes with 'friends_total'
         num_followers_per_uid = []
 
         if pool_size == 1:
             # no need to organize pool
-            num_followers_per_uid = list(map(get_num_followers, uids_with_friends_total))
+            num_followers_per_uid = list(
+                map(get_num_followers, uids_with_friends_total))
         else:
             # disable profiling, because of new fork processes
             if time_profiler:
@@ -302,7 +321,7 @@ def construct_graph(uids, required_attributes = ('first_name',
                 time_profiler.enable()
 
         # append number of followers to nodes
-        for i,num_followers in enumerate(num_followers_per_uid):
+        for i, num_followers in enumerate(num_followers_per_uid):
             if num_followers >= 0:
                 # quick and dirty solution
                 req_index = all_uids.index(all_uids[i])
@@ -322,10 +341,10 @@ def construct_graph(uids, required_attributes = ('first_name',
     # without duplicates and cut data
     def _append_nodes(src_list, dst_list):
         # UID: index of node with UID in dst_list
-        dst_node_indexes = { node[0]: i for i,node in enumerate(dst_list) }
+        dst_node_indexes = {node[0]: i for i, node in enumerate(dst_list)}
 
         for node in src_list:
-            # check, 
+            # check,
             # if uid of source node not in list of destination uids,
             if node[0] not in dst_node_indexes:
                 dst_list.append(node)
@@ -334,9 +353,9 @@ def construct_graph(uids, required_attributes = ('first_name',
             # then this node is newer,
             # so we need to replace older node by this
             elif 'friends_total' in node[1]:
-                # replace node in dst_list with actual data    
+                # replace node in dst_list with actual data
                 dst_list[dst_node_indexes[node[0]]] = node
-            
+
     # strip unnecessary attributes using strip_attributes(),
     # but preserve 'friends_total' and multiprocessing capabilities
     def _strip_attributes(nodes, preserve_attrs):
@@ -366,7 +385,7 @@ def construct_graph(uids, required_attributes = ('first_name',
                 time_profiler.enable()
 
         return nodes
-    
+
     # Enable profiling
     if time_profiler:
         time_profiler.enable()
@@ -375,9 +394,9 @@ def construct_graph(uids, required_attributes = ('first_name',
     cur_level = 0
 
     # Contains all data required to build graph
-    gd_accumulator = { 'nodes' : [], 'edges' : set() }
-    
-    # Build required attributes string. 
+    gd_accumulator = {'nodes': [], 'edges': set()}
+
+    # Build required attributes string.
     req_attrs_string = ', '.join(required_attributes)
 
     # List of user profiles with requested UIDs, for example
@@ -388,23 +407,23 @@ def construct_graph(uids, required_attributes = ('first_name',
     init_profiles = _get_init_profiles(args.uids, req_attrs_string)
 
     while cur_level < max_recursion_level:
-        print("\nGet friend profiles...")
-        print("Current level of recursion is {0}.\n".format(cur_level))
+        print('\nGet friend profiles...')
+        print('Current level of recursion is {0}.\n'.format(cur_level))
 
         # list of friends of users, which specified in init_profiles
         friend_profiles = _get_friend_profiles(init_profiles, req_attrs_string)
 
         # append information about total number of friends to
         # profiles in init_profiles
-        _append_num_friends(init_profiles, friend_profiles) 
+        _append_num_friends(init_profiles, friend_profiles)
 
-        print("Merge obtained friend profiles into graph data...\n")
-        # temporary storage for nodes and edges, use it 
+        print('Merge obtained friend profiles into graph data...\n')
+        # temporary storage for nodes and edges, use it
         # because of optimization purpouses
         all_obtained_nodes = []
         all_obtained_edges = set()
 
-        # iterate by init list of profile 
+        # iterate by init list of profile
         for i, init_profile in enumerate(init_profiles):
             all_obtained_edges.update(build_edges(init_profile,
                                                   friend_profiles[i]))
@@ -432,10 +451,10 @@ def construct_graph(uids, required_attributes = ('first_name',
 
     # Get number of followers
     if with_num_followers:
-        print("Get number of followers per user...\n")
+        print('Get number of followers per user...\n')
         _get_num_followers(gd_accumulator['nodes'])
 
-    print("\nBuild graph with obtained data...\n")
+    print('\nBuild graph with obtained data...\n')
     graph = nx.Graph()
 
     graph.add_nodes_from(gd_accumulator['nodes'])
@@ -454,9 +473,9 @@ DESCRIPTION = 'Get information about friends of user ' \
 TOKEN_VK = '2e27464b84d9a9833248daa69ac07ec4e9ef98a05' \
            '1ad62dd18dc4a51513281a8de4249170a575d40f1332'
 
-VK = vkontakte.API(token = TOKEN_VK)
+VK = vkontakte.API(token=TOKEN_VK)
 
-DEFAULT_ATTRIBUTES = [ 'first_name', 'last_name', 'sex' ]
+DEFAULT_ATTRIBUTES = ['first_name', 'last_name', 'sex']
 
 time_profiler = None
 
@@ -467,14 +486,14 @@ if __name__ == '__main__':
                         help='UID of vk.com user.')
     parser.add_argument('-w', '--write-to', metavar='PATH', type=str,
                         required=True,
-                        help='file to write graph data. ' \
+                        help='file to write graph data. '
                         'It currently supports YAML and pickle formats, '
                         'swithing between them by extension.')
     parser.add_argument('-p', '--pool-size', metavar='N', type=int,
                         default=1, help='number of downloading '
                         'threads in pool.')
     parser.add_argument('-r', '--recursion-level', metavar='N', type=int,
-                        default=1, help='recursion deepness, ' \
+                        default=1, help='recursion deepness, '
                         'use it to get friends of friends, etc.')
     parser.add_argument('--data-attributes', metavar='ATTR', type=str,
                         nargs='+', default=DEFAULT_ATTRIBUTES,
@@ -482,7 +501,7 @@ if __name__ == '__main__':
     parser.add_argument('--with-num-followers', action='store_true',
                         help='get number of followers per user')
     parser.add_argument('--time-profiling', metavar='PATH', type=str,
-                        help='write speed profile in pStats' \
+                        help='write speed profile in pStats'
                         'compatible format to file, specified by PATH')
 
     # parse cli options
@@ -491,33 +510,33 @@ if __name__ == '__main__':
     try:
         args_are_valid(args)
         start_time = time.time()
-        
+
         if args.time_profiling:
             time_profiler = cProfile.Profile()
 
-        print("Start constructing graph for vk.com users with UIDs:",
-              ", ".join(map(str, args.uids)))
-        print("Requested data attributes:", ", ".join(args.data_attributes))
-        print("Recursion level:", args.recursion_level)
-        print("Pool size:", args.pool_size, "\n")
-       
-        G = construct_graph(uids = args.uids,
-                            required_attributes = tuple(args.data_attributes),
-                            with_num_followers = args.with_num_followers,
-                            max_recursion_level = args.recursion_level,
-                            pool_size = args.pool_size,
-                            time_profiler = time_profiler)
-        
-        print(nx.info(G), "\n")
-        
+        print('Start constructing graph for vk.com users with UIDs:',
+              ', '.join(map(str, args.uids)))
+        print('Requested data attributes:', ', '.join(args.data_attributes))
+        print('Recursion level:', args.recursion_level)
+        print('Pool size:', args.pool_size, '\n')
+
+        G = construct_graph(uids=args.uids,
+                            required_attributes=tuple(args.data_attributes),
+                            with_num_followers=args.with_num_followers,
+                            max_recursion_level=args.recursion_level,
+                            pool_size=args.pool_size,
+                            time_profiler=time_profiler)
+
+        print(nx.info(G), '\n')
+
         io.write_graph(G, args.write_to)
 
         if args.time_profiling:
             write_time_profiling_data(time_profiler, args.time_profiling)
 
     except ValueError:
-        print("ValueError happened! Quitting...")
+        print('ValueError happened! Quitting...')
     except IOError:
-        print("IOError happened! Quitting...")
+        print('IOError happened! Quitting...')
     else:
         gprint.print_elapsed_time(time.time() - start_time)

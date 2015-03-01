@@ -1,6 +1,5 @@
 """This module contains various predicate functions."""
 
-import graph.stats as stats
 
 def is_media_activist(node, avg_num_friends):
     '''Check, if person is media-activist.
@@ -17,19 +16,18 @@ def is_media_activist(node, avg_num_friends):
     if 'friends_total' in node[1]:
         num_friends = node[1]['friends_total']
         if (num_friends > hard_limit):
-            return True        
+            return True
         elif 'followers_total' in node[1]:
             num_followers = node[1]['followers_total']
             if num_followers > hard_limit:
                 return True
             elif ((num_followers > soft_limit) and
-                (num_followers > num_friends * soft_ff_ratio)):
+                  (num_followers > num_friends * soft_ff_ratio)):
                 return True
             elif num_friends > num_followers * hard_ff_ratio:
                 return True
             elif ((num_friends > soft_limit) and
-                (num_friends > num_followers * soft_ff_ratio)):
+                  (num_friends > num_followers * soft_ff_ratio)):
                 return True
-            
-    return False
 
+    return False
