@@ -31,10 +31,8 @@ def print_elapsed_time(timedelta):
     print('{0} seconds.'.format(seconds), end='')
     print()
 
-# print progress bar in form: "[###-------]"
-
-
 def print_progress(cur_value, max_value, width=72):
+    """Print progress bar in form: [###-------]."""
     progress = int((cur_value * 100) / max_value)
 
     # effective width -- width of bar without brackets
