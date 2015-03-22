@@ -11,7 +11,7 @@ data from vk.com, process, analyze and plot them.
 
 Here is the example of social graph built by these scripts (without data about individuals):
 ![Example of social graph]
-(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.svg)
+(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.png)
 
 In this graph, **node size** shows **total number friends in vkontakte network** --
 the more common friends user has, the larger his node is.
@@ -82,7 +82,7 @@ VKStat -- это набор из скриптов, которые выполня
 Данные, загружаемые посредством VK API, представляются в виде 
 [социального графа](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D1%84):
 ![Пример социального графа]
-(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.svg)
+(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.png)
 
 ## установка
 
