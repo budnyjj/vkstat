@@ -11,7 +11,7 @@ data from vk.com, process, analyze and plot them.
 
 Here is the example of social graph built by these scripts (without data about individuals):
 ![Example of social graph]
-(https://github.com/budnyjj/vkstat/blob/master/examples/first.png)
+(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.svg)
 
 In this graph, **node size** shows **total number friends in vkontakte network** --
 the more common friends user has, the larger his node is.
@@ -27,11 +27,16 @@ The **node label** contains basic information about profile.
 ## installation
 
 These scripts are written in **Python 3** with some external dependencies:
-* [vkontakte3](https://github.com/budnyjj/vkontakte3) -- vk.com API for Python 3 (required)
-* [networkx](https://networkx.github.io/) -- graph creation and manipulation (required)
-* [matplotlib](http://matplotlib.org/) -- graph visualization (required)
-* [PyYAML](https://pypi.python.org/pypi/PyYAML) -- read/write graph from/to files in YAML format (optional)
-* [PrettyTable](https://pypi.python.org/pypi/PrettyTable) -- print graph data in table format (optional)
+* [vkontakte3](https://github.com/budnyjj/vkontakte3) --
+vk.com API for Python 3 (required)
+* [networkx](https://networkx.github.io/) --
+graph creation and manipulation (required)
+* [matplotlib](http://matplotlib.org/) --
+graph visualization (required)
+* [PyYAML](https://pypi.python.org/pypi/PyYAML) --
+read/write graph from/to files in YAML format (optional)
+* [PrettyTable](https://pypi.python.org/pypi/PrettyTable) --
+print graph data in table format (optional)
 
 ## functionality overview
 
@@ -77,15 +82,7 @@ VKStat -- это набор из скриптов, которые выполня
 Данные, загружаемые посредством VK API, представляются в виде 
 [социального графа](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D1%84):
 ![Пример социального графа]
-(https://github.com/budnyjj/vkstat/blob/master/examples/first.png)
-
-<!-- В этом графе, **размер узла** показывает **общее число друзей в сети Вконтакте** -- -->
-<!-- чем больше друзей есть у пользователя, тем больше его узел. -->
-
-<!-- **Цвет узла** зависит от **числа друзей в графе** -- -->
-<!-- чем больше друзей есть у пользователя, тем более темную окраску имеет его узел. -->
-
-<!-- **Цвет -->
+(https://github.com/budnyjj/vkstat/blob/master/examples/with_gephi.svg)
 
 ## установка
 
