@@ -87,15 +87,15 @@ def get_profile(uid, req_fields='first_name, last_name, sex',
                 else:
                     print('Reached maximal bandwith error count ({0})! '
                           'Skip...'.format(error_count))
-                    return []
+                    return None
             else:
                 print('   {}.'.format(e.description))
-                return []
+                return None
 
         except Exception as e:
             print('E: profile {}:'.format(uid))
             print('   {}.'.format(e))
-            return []
+            return None
 
         else:
             print('S: profile {uid}: '
