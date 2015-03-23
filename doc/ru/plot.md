@@ -1,4 +1,4 @@
-# Представление графа в графическом виде
+# Визуализация графов
 
 Для отрисовки графа на данный момент доступно две утилиты:
 скрипт [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py)
@@ -61,12 +61,23 @@
 визуализации графов, чем [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py).
 Краткий обзор функциональности доступен [здесь](http://gephi.github.io/features/).
 Для работы Gephi требуется JRE 7.
+Далее приведены несколько примеров визуализации графа с помощью Gephi.
 
 ### Аналог plot.py
 
 Граф, аналогичный полученному с помощью
-[plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py).
+[plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py):
 
-![Граф, полученный с помощью gephi]
+![Аналог plot.py]
 (https://github.com/budnyjj/vkstat/blob/master/doc/pic/gephi.png)
+
+### Кто онлайн?
+
+![Кто онлайн?]
+(https://github.com/budnyjj/vkstat/blob/master/doc/pic/online.png)
+
+Легенда:
+
+* Узел окрашен в **зеленый цвет** -- пользователь **в сети**,
+иначе -- в **красный**.
 
