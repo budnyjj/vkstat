@@ -1,8 +1,7 @@
 # Визуализация графов
 
 Для отрисовки графа на данный момент доступно две утилиты:
-скрипт [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py)
-и [Gephi](http://gephi.github.io/).
+скрипт **plot.py** и **Gephi**.
 Далее будет представлен обзор функциональности этих утилит
 на примере [моего социального графа](https://vk.com/budnyjj),
 полученного следующим образом:
@@ -25,7 +24,7 @@
 
 Скрипт [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py)
 используется для построения небольших графов (**до 500 узлов**).
-Для отрисовки графа используется библиотека [matplotlib](http://matplotlib.org/).
+Для отрисовки графа используется библиотека **matplotlib**.
 
 ```bash
 ./plot.py\
@@ -58,15 +57,14 @@
 ## Gephi
 
 [Gephi](http://gephi.github.io/) представляет собой намного мощное средство
-визуализации графов, чем [plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py).
+визуализации графов, чем **plot.py**.
 Краткий обзор функциональности доступен [здесь](http://gephi.github.io/features/).
 Для работы Gephi требуется JRE 7.
 Далее приведены несколько примеров визуализации графа с помощью Gephi.
 
 ### Аналог plot.py
 
-Граф, аналогичный полученному с помощью
-[plot.py](https://github.com/budnyjj/vkstat/blob/master/plot.py):
+Граф, аналогичный полученному ранее с помощью **plot.py**:
 
 ![Аналог plot.py]
 (https://github.com/budnyjj/vkstat/blob/master/doc/pic/gephi.png)
