@@ -10,7 +10,7 @@ VKStat -- это набор скриптов, которые выполняют 
 (https://github.com/budnyjj/vkstat/blob/master/doc/pic/clusterization.png)
 
 Больше красивых картинок смотри [здесь]
-(https://github.com/budnyjj/vkstat/doc/ru/plot.md).
+(https://github.com/budnyjj/vkstat/blob/master/doc/RU/plot.md).
 
 ## Установка
 
