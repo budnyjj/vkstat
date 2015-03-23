@@ -31,7 +31,6 @@ VKStat написан на **Python 3** со следующими внешним
 
 * [vkontakte3](https://github.com/budnyjj/vkontakte3) --
 VK API для Python 3
-
 * [networkx](https://networkx.github.io/) --
 создание и обработка графов
 
@@ -39,13 +38,10 @@ VK API для Python 3
 
 * [PyYAML](https://pypi.python.org/pypi/PyYAML) --
 чтение/запись графа в формате YAML
-
 * [PrettyTable](https://pypi.python.org/pypi/PrettyTable) --
 вывод данных графа в табличном виде (info.py)
-
 * [matplotlib](http://matplotlib.org/) -- визуализация графа средствами Python
 (plot.py)
-
 * [Gephi](http://gephi.github.io/) -- визуализация графа средствами Gephi
 
 ## Обзор функциональности
@@ -98,6 +94,6 @@ get.py --> process.py ---> info.py
   Gephi является более мощным инструментом для визуализации графов, чем plot.py,
   и позволяет **отображать графы размером 2500 узлов** при тех же системных требованиях,
   что и **plot.py**.
-
+  
   Чтобы успешно импортировать граф в Gephi, нужно предварительно
   сконвертировать его в формат GEXF c помощью **process.py**.
