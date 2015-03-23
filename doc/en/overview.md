@@ -11,7 +11,7 @@ data from vk.com, process, analyze and plot them.
 
 Here is the example of social graph built by these scripts (without data about individuals):
 ![Example of social graph]
-(https://github.com/budnyjj/vkstat/blob/master/doc/pic/with_gephi.png)
+(https://github.com/budnyjj/vkstat/blob/master/doc/pic/clusterization.png)
 
 In this graph, **node size** shows **total number friends in vkontakte network** --
 the more common friends user has, the larger his node is.
