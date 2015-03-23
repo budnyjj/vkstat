@@ -7,11 +7,11 @@
 полученного следующим образом:
 ```bash
 ./get.py\
-  --with-num-followers\ # получаем не только друзей, но и фоллловеров 
-  -r 2\                 # уровень рекурсии (человек, его друзья, друзья его друзей)
-  -p 4\                 # загрузка в четыре потока
-  -w _data/mine.pickle  # сохраняем в формате pickle
-  55358627              # мой UID
+  --with-num-followers\           # получаем не только друзей, но и фоллловеров 
+  -r 2\                           # уровень рекурсии (человек, его друзья, друзья его друзей)
+  -p 4\                           # загрузка в четыре потока
+  -w _data/mine.pickle            # сохраняем в формате pickle
+  55358627                        # мой UID
 
 ./process.py\
   --exclude-media-activists\      # исключаем медиа-активистов
@@ -26,5 +26,16 @@
 (**до 500 узлов**). Для отрисовки графа используется библиотека
 [matplotlib](http://matplotlib.org/).
 
+```bash
+./plot.py\
+  --no-labels\                    # без имен
+  -o doc/pic/plot-py.png\         # сохраняем в png
+  _data/mine_trim-3_no-media.gexf # файл-источник
+```
+
+Результат:
+
+![Граф, полученный с помощью plot.py]
+(https://github.com/budnyjj/vkstat/blob/master/doc/pic/plot-py.png)
 
 ## Gephi
