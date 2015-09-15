@@ -23,8 +23,8 @@ DEFAULT_TRIM = 1
 
 
 def trim(graph, min_num_nodes):
-    """Return copy of graph with only nodes with number of edges greater, than
-    min_num_nodes."""
+    '''Return copy of graph with only nodes with number of edges greater,
+    than min_num_nodes.'''
 
     print('Trim nodes with less than {0} '
           'connected edges:'.format(min_num_nodes))
@@ -46,7 +46,7 @@ def trim(graph, min_num_nodes):
 
 
 def exclude_media_activists(graph):
-    '''Exclude "media-activists" from graph.'''
+    '''Exclude 'media-activists' from graph.'''
 
     print('Exclude media-activists:')
 
@@ -67,6 +67,27 @@ def exclude_media_activists(graph):
     print('\n')
     return res_graph
 
+def filter_by_uids(graph, uids):
+    '''Return copy of graph with nodes containing specified uids'''
+    print('Filter by uids: {}'.format(uids))
+
+    # make copy of graph to count neighbors per node
+    res_graph = graph.copy()
+
+    # get start number of nodes to show progress
+    start_num_nodes = graph.number_of_nodes()
+
+    for n, node in enumerate(graph.nodes()):
+        gprint.print_progress(n + 1, start_num_nodes)
+        if node not in uids:
+            res_graph.remove_node(node)
+
+    # need to add newline after progress bar
+    print('\n')
+
+    return res_graph
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('src', metavar='SOURCE', type=str,
@@ -82,6 +103,10 @@ if __name__ == '__main__':
     parser.add_argument('--trim', metavar='N', type=int,
                         default=DEFAULT_TRIM, help='trim nodes with'
                         'less than N connected edges')
+    parser.add_argument('--uids', metavar='UID', type=int,
+                        nargs = '+', help='filter nodes by UIDs')
+
+
     args = parser.parse_args()
 
     start_time = time.time()
@@ -94,6 +119,9 @@ if __name__ == '__main__':
 
         if args.exclude_media_activists:
             G = exclude_media_activists(G)
+
+        if args.uids:
+            G = filter_by_uids(G, set(args.uids))
 
         if args.trim > DEFAULT_TRIM:
             G = trim(G, args.trim)
