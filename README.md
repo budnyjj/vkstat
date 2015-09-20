@@ -1,1 +1,1 @@
-doc/RU/overview.md
+doc/README.md
